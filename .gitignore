@@ -1,0 +1,9 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+
+# Local preview artifacts
+_preview_*.png
+_d_*.png
+_m_*.png
