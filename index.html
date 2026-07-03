@@ -3,221 +3,560 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Inhabit — Teleoperation hardware for the embodied-AI era</title>
-  <meta name="description" content="Inhabit builds open-source teleoperation hardware and software for collecting high-quality robot manipulation data. Modular leader-follower arms, egocentric capture rigs, and synced multi-camera recording." />
-
-  <meta property="og:title" content="Inhabit — Teleoperation hardware for the embodied-AI era" />
-  <meta property="og:description" content="Open-source teleoperation hardware and software for collecting high-quality robot manipulation data." />
+  <title>Inhabit — The universal software layer for robots</title>
+  <meta name="description" content="Inhabit is the universal teleoperation and data platform for robots. One kernel to drive any robot. One pipeline to turn every session into training-grade data." />
+  <meta property="og:title" content="Inhabit — The universal software layer for robots" />
+  <meta property="og:description" content="Universal teleoperation kernel, PVT data engine, and simulation-first validation on one platform." />
   <meta property="og:type" content="website" />
 
+  <link rel="preconnect" href="https://api.fontshare.com" />
+  <link href="https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@700,500,400&f[]=general-sans@600,500,400&display=swap" rel="stylesheet" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+  <!-- BOOT SEQUENCE -->
+  <div id="boot" class="boot" role="status" aria-label="System initializing">
+    <div class="boot__inner">
+      <div class="boot__logo">
+        <div class="boot__mark"><div class="boot__mark-dot"></div></div>
+        <span class="boot__name">Inhabit</span>
+      </div>
+      <div class="boot__log" id="bootLog"></div>
+      <div class="boot__progress-track">
+        <div class="boot__progress-bar" id="bootBar"></div>
+      </div>
+      <div class="boot__skip">CLICK TO SKIP</div>
+    </div>
+  </div>
+
   <a class="skip-link" href="#main">Skip to content</a>
 
   <!-- NAV -->
   <header class="nav" id="nav">
-    <div class="wrap nav__inner">
+    <div class="nav__inner">
       <a class="nav__brand" href="#top" aria-label="Inhabit home">
-        <span class="nav__mark" aria-hidden="true"></span>
-        Inhabit
+        <div class="nav__cube">
+          <div class="nav__cube-dot"></div>
+        </div>
+        <span>Inhabit</span>
       </a>
       <nav class="nav__links" aria-label="Primary">
-        <a href="#problem">Problem</a>
-        <a href="#build">What we built</a>
-        <a href="#specs">Specs</a>
+        <a href="#platform">Platform</a>
+        <a href="#kernel">Teleop Kernel</a>
+        <a href="#session">Live Session</a>
+        <a href="#hardware">Hardware</a>
+        <a href="#sdk">SDK</a>
       </nav>
-      <a class="btn btn--ghost nav__cta" href="https://github.com/" target="_blank" rel="noopener">
-        <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-        GitHub
-      </a>
+      <div class="nav__actions">
+        <a class="btn btn--ghost btn--sm" href="https://github.com/YoussefAnbar/Inhabit-Software" target="_blank" rel="noopener">
+          <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+        <a class="btn btn--primary btn--sm" href="mailto:hello@inhabit.dev">Request demo →</a>
+      </div>
     </div>
   </header>
 
   <main id="main">
-    <!-- HERO -->
+
+    <!-- ══════════════════════════ HERO ══════════════════════════ -->
     <section class="hero" id="top">
       <div class="hero__bg" aria-hidden="true">
+        <canvas class="hero__canvas" id="heroCanvas"></canvas>
         <div class="hero__glow"></div>
         <div class="hero__grid"></div>
-        <!-- Wireframe leader-follower arm -->
+        <!-- HUD corner brackets -->
+        <div class="hud-frame">
+          <span class="hud-frame__tl"></span>
+          <span class="hud-frame__tr"></span>
+          <span class="hud-frame__bl"></span>
+          <span class="hud-frame__br"></span>
+        </div>
+        <!-- Wireframe arm -->
         <svg class="arm" viewBox="0 0 520 520" fill="none" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
           <defs>
             <linearGradient id="armStroke" x1="0" y1="1" x2="1" y2="0">
-              <stop offset="0" stop-color="var(--accent)" stop-opacity="0.35"/>
-              <stop offset="1" stop-color="var(--accent)" stop-opacity="0.95"/>
+              <stop offset="0" stop-color="#3cc8ff" stop-opacity="0.15"/>
+              <stop offset="1" stop-color="#3cc8ff" stop-opacity="0.7"/>
             </linearGradient>
           </defs>
-
-          <!-- base -->
-          <circle cx="150" cy="430" r="46" stroke="rgba(255,255,255,0.1)" stroke-width="1.5"/>
-          <circle cx="150" cy="430" r="30" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
-          <circle cx="150" cy="430" r="9" fill="var(--accent)" opacity="0.9"/>
-
-          <!-- whole arm sways around the base (single correct pivot) -->
+          <circle cx="150" cy="430" r="46" stroke="rgba(60,200,255,0.07)" stroke-width="1.5"/>
+          <circle cx="150" cy="430" r="30" stroke="rgba(60,200,255,0.04)" stroke-width="1"/>
+          <circle cx="150" cy="430" r="8" fill="#3cc8ff" opacity="0.75"/>
           <g class="arm__sway">
-            <!-- link 1: base -> shoulder -->
-            <line x1="150" y1="430" x2="150" y2="300" stroke="url(#armStroke)" stroke-width="3" stroke-linecap="round"/>
-            <circle cx="150" cy="300" r="13" stroke="var(--accent)" stroke-width="2" fill="rgba(10,10,11,0.7)"/>
-            <!-- link 2: shoulder -> elbow -->
-            <line x1="150" y1="300" x2="270" y2="230" stroke="url(#armStroke)" stroke-width="3" stroke-linecap="round"/>
-            <circle cx="270" cy="230" r="11" stroke="var(--accent)" stroke-width="2" fill="rgba(10,10,11,0.7)"/>
-            <!-- link 3: elbow -> wrist -->
-            <line x1="270" y1="230" x2="348" y2="264" stroke="url(#armStroke)" stroke-width="3" stroke-linecap="round"/>
-
-            <!-- gripper articulates at the wrist -->
+            <line x1="150" y1="430" x2="150" y2="300" stroke="url(#armStroke)" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="150" cy="300" r="12" stroke="#3cc8ff" stroke-width="1.5" fill="rgba(6,9,11,0.85)"/>
+            <line x1="150" y1="300" x2="270" y2="230" stroke="url(#armStroke)" stroke-width="2.5" stroke-linecap="round"/>
+            <circle cx="270" cy="230" r="10" stroke="#3cc8ff" stroke-width="1.5" fill="rgba(6,9,11,0.85)"/>
+            <line x1="270" y1="230" x2="348" y2="264" stroke="url(#armStroke)" stroke-width="2.5" stroke-linecap="round"/>
             <g class="arm__grip">
-              <line x1="348" y1="264" x2="378" y2="248" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
-              <line x1="348" y1="264" x2="378" y2="280" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round"/>
-              <circle cx="348" cy="264" r="6" fill="var(--accent)"/>
+              <line x1="348" y1="264" x2="380" y2="247" stroke="#3cc8ff" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
+              <line x1="348" y1="264" x2="380" y2="281" stroke="#3cc8ff" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
+              <circle cx="348" cy="264" r="5" fill="#3cc8ff"/>
             </g>
           </g>
-
-          <!-- faint target the arm reaches toward -->
-          <circle class="arm__target" cx="430" cy="186" r="4" fill="var(--accent)"/>
-          <circle class="arm__target-ring" cx="430" cy="186" r="15" stroke="var(--accent)" stroke-width="1" fill="none"/>
+          <circle class="arm__target" cx="432" cy="184" r="3.5" fill="#3cc8ff"/>
+          <circle class="arm__target-ring" cx="432" cy="184" r="14" stroke="#3cc8ff" stroke-width="0.75" fill="none"/>
         </svg>
       </div>
 
-      <div class="wrap hero__inner">
-        <p class="eyebrow reveal">Open-source teleoperation · physical AI</p>
-        <h1 class="hero__title reveal">Inhabit</h1>
-        <p class="hero__tagline reveal">Teleoperation hardware for the embodied-AI era.</p>
-        <p class="hero__sub reveal">Modular leader-follower rigs and an open software stack for collecting high-quality robot manipulation data — at a fraction of the usual cost.</p>
+      <div class="hero__content">
+        <div class="hero__badge reveal">
+          <span class="hero__badge-dot"></span>
+          UNIVERSAL TELEOPERATION KERNEL
+        </div>
+        <h1 class="hero__title reveal">The universal software layer for robots.</h1>
+        <p class="hero__sub reveal">One kernel to drive any robot. One pipeline to turn every session into manufacturable-grade data.</p>
         <div class="hero__cta reveal">
-          <a class="btn btn--primary" href="#build">Get the hardware</a>
-          <a class="btn btn--ghost" href="https://github.com/" target="_blank" rel="noopener">
-            <svg viewBox="0 0 16 16" width="16" height="16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-            Star on GitHub
+          <a class="btn btn--primary" href="mailto:hello@inhabit.dev">Request a demo →</a>
+          <a class="btn btn--ghost" href="https://github.com/YoussefAnbar/Inhabit-Software" target="_blank" rel="noopener">
+            <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+            View on GitHub
           </a>
         </div>
       </div>
 
-      <div class="hero__scroll reveal" aria-hidden="true">
-        <span>Scroll</span>
-        <span class="hero__scroll-line"></span>
+      <!-- Scrolling ticker -->
+      <div class="ticker" aria-hidden="true">
+        <div class="ticker__track">
+          <div class="ticker__inner">
+            <span>OPERATE</span><span class="ticker__sep">·</span><span>CAPTURE</span><span class="ticker__sep">·</span><span>DEPLOY</span><span class="ticker__sep">·</span><span>ROS&nbsp;2</span><span class="ticker__sep">·</span><span>RTDE</span><span class="ticker__sep">·</span><span>CANOPEN</span><span class="ticker__sep">·</span><span>ETHERCAT</span><span class="ticker__sep">·</span><span>PVT PIPELINE</span><span class="ticker__sep">·</span><span>LEROBOT</span><span class="ticker__sep">·</span><span>MCAP</span><span class="ticker__sep">·</span><span>RLDS</span><span class="ticker__sep">·</span><span>OPEN SOURCE</span><span class="ticker__sep">·</span>
+            <span>OPERATE</span><span class="ticker__sep">·</span><span>CAPTURE</span><span class="ticker__sep">·</span><span>DEPLOY</span><span class="ticker__sep">·</span><span>ROS&nbsp;2</span><span class="ticker__sep">·</span><span>RTDE</span><span class="ticker__sep">·</span><span>CANOPEN</span><span class="ticker__sep">·</span><span>ETHERCAT</span><span class="ticker__sep">·</span><span>PVT PIPELINE</span><span class="ticker__sep">·</span><span>LEROBOT</span><span class="ticker__sep">·</span><span>MCAP</span><span class="ticker__sep">·</span><span>RLDS</span><span class="ticker__sep">·</span><span>OPEN SOURCE</span><span class="ticker__sep">·</span>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- PROBLEM -->
-    <section class="section problem" id="problem">
+    <!-- ══════════════════════ 01 PLATFORM ══════════════════════ -->
+    <section class="section platform" id="platform">
       <div class="wrap">
-        <p class="eyebrow reveal">The bottleneck</p>
-        <h2 class="problem__statement reveal">
-          Robot foundation models are starved for
-          <span class="accent">real-world manipulation data.</span>
-        </h2>
-        <p class="problem__body reveal">
-          Models scale with data. But unlike text and images, robot manipulation data
-          can't be scraped — it has to be physically demonstrated. The rigs to collect it
-          are expensive, fragmented, and locked behind proprietary stacks. So the data stays scarce,
-          and embodied AI stays stuck.
-        </p>
-        <p class="problem__body reveal"><span class="accent">Inhabit fixes the collection layer.</span> Affordable, modular hardware and an open pipeline so teams can capture demonstrations at scale.</p>
+        <span class="ghost-num" aria-hidden="true">01</span>
+        <div class="section__split reveal">
+          <div>
+            <div class="kicker">01 — PLATFORM</div>
+            <h2 class="section__title">Operate.<br>Capture.<br>Deploy.</h2>
+          </div>
+          <p class="section__intro">Inhabit is the operating layer between human intent and any robot body — and the pipeline that turns every minute of operation into training-grade data.</p>
+        </div>
+
+        <div class="pillars">
+          <article class="pillar reveal">
+            <div class="pillar__tag">OPERATE</div>
+            <h3 class="pillar__title">Universal teleoperation</h3>
+            <p class="pillar__body">One operator surface for every robot in your fleet. Protocol-agnostic adapters, transport-agnostic links, orchestrated sessions with sub-frame timing visibility.</p>
+            <div class="pillar__foot">
+              <span class="pillar__stat">40+</span>
+              <span class="pillar__stat-label">ROBOT MORPHOLOGIES</span>
+            </div>
+          </article>
+
+          <article class="pillar reveal" data-delay="80">
+            <div class="pillar__tag">CAPTURE</div>
+            <h3 class="pillar__title">PVT data engine</h3>
+            <p class="pillar__body">Proprioceptive, visual, and tactile streams captured in lockstep. Event detection segments episodes automatically; QA gates keep the dataset manufacturable-grade.</p>
+            <div class="pillar__foot">
+              <span class="pillar__stat">±0.4ms</span>
+              <span class="pillar__stat-label">STREAM ALIGNMENT</span>
+            </div>
+          </article>
+
+          <article class="pillar reveal" data-delay="160">
+            <div class="pillar__tag">DEPLOY</div>
+            <h3 class="pillar__title">Simulation-first validation</h3>
+            <p class="pillar__body">Every scenario runs in sim before it touches hardware. Benchmarks score policies against real episodes so deployment is a decision, not a gamble.</p>
+            <div class="pillar__foot">
+              <span class="pillar__stat">12×</span>
+              <span class="pillar__stat-label">SYNTHETIC DATA YIELD</span>
+            </div>
+          </article>
+        </div>
       </div>
     </section>
 
-    <!-- WHAT WE BUILT -->
-    <section class="section build" id="build">
+    <!-- ══════════════════════ 02 TELEOP KERNEL ══════════════════════ -->
+    <section class="section kernel" id="kernel">
       <div class="wrap">
-        <div class="section__head">
-          <p class="eyebrow reveal">What we built</p>
-          <h2 class="section__title reveal">A complete capture stack — every layer open.</h2>
-        </div>
+        <span class="ghost-num ghost-num--left" aria-hidden="true">02</span>
+        <div class="kernel__grid">
+          <div class="reveal">
+            <div class="kicker">02 — UNIVERSAL TELEOP KERNEL</div>
+            <h2 class="section__title">Any robot. Any protocol. One kernel.</h2>
+            <p class="kernel__body">Adapters translate robot-native protocols into a single control contract. Transports carry commands over whatever link exists. Operators never see the difference.</p>
+            <ul class="kernel__points">
+              <li><span class="kernel__diamond"></span>Adapters: ROS 2, RTDE, CANopen, EtherCAT, proprietary — one contract.</li>
+              <li><span class="kernel__diamond"></span>Transports: LAN, WebRTC, fiber, satellite — hot-swappable mid-session.</li>
+              <li><span class="kernel__diamond"></span>Session orchestration: handoff, takeover, multi-operator, replay.</li>
+            </ul>
+          </div>
 
-        <div class="cards">
-          <article class="card reveal">
-            <div class="card__num">01</div>
-            <h3 class="card__title">Modular leader-follower arms</h3>
-            <p class="card__body">6-DOF leader and follower arms you build yourself. Swap joints, links, and grippers. Calibrate in minutes, not days.</p>
-            <span class="card__tag">Hardware</span>
-          </article>
-
-          <article class="card reveal">
-            <div class="card__num">02</div>
-            <h3 class="card__title">Egocentric collection rig</h3>
-            <p class="card__body">Head-mounted stereo plus wrist cameras capture the operator's point of view — the perspective embodied policies actually learn from.</p>
-            <span class="card__tag">Capture</span>
-          </article>
-
-          <article class="card reveal">
-            <div class="card__num">03</div>
-            <h3 class="card__title">Synced MCAP recording</h3>
-            <p class="card__body">Hardware-timestamped, multi-camera streams plus joint states written to MCAP. Frame-accurate sync, ready for training.</p>
-            <span class="card__tag">Software</span>
-          </article>
-
-          <article class="card reveal">
-            <div class="card__num">04</div>
-            <h3 class="card__title">Open-source stack</h3>
-            <p class="card__body">CAD, firmware, drivers, and the recording pipeline — all open. Fork it, extend it, ship your own variant.</p>
-            <span class="card__tag">Open</span>
-          </article>
+          <div class="reveal" data-delay="100">
+            <div class="kernel__diagram">
+              <div class="kernel__row">
+                <div class="kernel__node"><div class="kernel__node-name">Humanoid</div><div class="kernel__node-proto">ROS 2</div></div>
+                <div class="kernel__node"><div class="kernel__node-name">Arm</div><div class="kernel__node-proto">RTDE</div></div>
+                <div class="kernel__node"><div class="kernel__node-name">Quadruped</div><div class="kernel__node-proto">CANOPEN</div></div>
+                <div class="kernel__node"><div class="kernel__node-name">Mobile</div><div class="kernel__node-proto">PROPRIETARY</div></div>
+              </div>
+              <div class="kernel__lines kernel__lines--down">
+                <span></span><span></span><span></span>
+              </div>
+              <div class="kernel__core">
+                <div class="kernel__core-name">Inhabit Teleop Kernel</div>
+                <div class="kernel__core-sub">ADAPTERS · TRANSPORTS · SESSION ORCHESTRATION</div>
+                <div class="kernel__core-latency">p99 6.8ms</div>
+              </div>
+              <div class="kernel__lines kernel__lines--up">
+                <span></span><span></span>
+              </div>
+              <div class="kernel__row">
+                <div class="kernel__node"><div class="kernel__node-name">Operator Stations</div><div class="kernel__node-proto">HAPTIC · VR · CONSOLE</div></div>
+                <div class="kernel__node"><div class="kernel__node-name">PVT Pipeline</div><div class="kernel__node-proto">CAPTURE · ALIGN · EXPORT</div></div>
+                <div class="kernel__node"><div class="kernel__node-name">Simulation</div><div class="kernel__node-proto">SCENARIOS · BENCHMARKS</div></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- SPECS -->
-    <section class="section specs" id="specs">
+    <!-- ══════════════════════ 03 SESSION TIMELINE ══════════════════════ -->
+    <section class="section session" id="session">
       <div class="wrap">
-        <div class="section__head">
-          <p class="eyebrow reveal">By the numbers</p>
-          <h2 class="section__title reveal">Built lean. Built to scale.</h2>
+        <span class="ghost-num" aria-hidden="true">03</span>
+        <div class="section__center reveal">
+          <div class="kicker">03 — REPLAY A SESSION</div>
+          <h2 class="section__title">Scrub through a real teleop episode.</h2>
+          <p class="session__intro">Every phase — reach, contact, grasp, recovery, place — captured in lockstep across proprioceptive, visual, and tactile streams.</p>
         </div>
 
-        <div class="stats">
-          <div class="stat reveal">
-            <div class="stat__value">~$360<span class="stat__unit">BOM</span></div>
-            <div class="stat__label">Per leader-follower pair</div>
+        <div class="session__card reveal" data-delay="100">
+          <div class="session__header">
+            <span class="session__ep">EPISODE E-8841 · UR10e-03 · BIN PICK — DENSE</span>
+            <span class="session__phase-pill" id="phasePill">
+              <span class="session__phase-dot" id="phaseDot"></span>
+              <span id="phaseLabel">REACH</span>
+            </span>
           </div>
-          <div class="stat reveal">
-            <div class="stat__value">4<span class="stat__unit">cam</span></div>
-            <div class="stat__label">Synchronized streams</div>
+          <div class="session__body">
+            <div class="session__viewport">
+              <div class="session__cam-label">CAM-0 WRIST</div>
+              <div class="session__frame-center">
+                <div class="session__frame-time" id="frameTime">00:41</div>
+                <div class="session__frame-hint" id="frameHint">free-space approach, no contact</div>
+              </div>
+              <div class="session__viewport-badges">
+                <span class="session__grip-badge" id="gripBadge">GRIP 0%</span>
+                <span class="session__tag-badge" id="tagBadge">APPROACH</span>
+              </div>
+            </div>
+            <div class="session__telem">
+              <div class="session__telem-label">TELEMETRY @ SCRUB</div>
+              <div id="telemRows" class="session__telem-rows"></div>
+            </div>
           </div>
-          <div class="stat reveal">
-            <div class="stat__value">6<span class="stat__unit">DOF</span></div>
-            <div class="stat__label">Per arm, fully articulated</div>
+          <div class="session__scrubber">
+            <div class="session__track" id="sessionTrack">
+              <div class="session__phase-bg" id="phaseBg"></div>
+              <div class="session__thumb" id="sessionThumb"></div>
+            </div>
+            <div class="session__phase-legend" id="phaseLegend"></div>
           </div>
-          <div class="stat reveal">
-            <div class="stat__value">100<span class="stat__unit">%</span></div>
-            <div class="stat__label">Open source · MIT</div>
-          </div>
-        </div>
-
-        <div class="cta-band reveal">
-          <div class="cta-band__text">
-            <h3>Start collecting data this week.</h3>
-            <p>Clone the repo, print the parts, order the BOM. Everything you need is open.</p>
-          </div>
-          <a class="btn btn--primary" href="https://github.com/" target="_blank" rel="noopener">Get the hardware</a>
         </div>
       </div>
     </section>
+
+    <!-- ══════════════════════ 04 PVT DATA ══════════════════════ -->
+    <section class="section pvt" id="data">
+      <div class="pvt__band">
+        <div class="wrap">
+          <span class="ghost-num ghost-num--left" aria-hidden="true">04</span>
+          <div class="section__center reveal">
+            <div class="kicker">04 — PVT DATA PLATFORM</div>
+            <h2 class="section__title">Every session becomes a dataset.</h2>
+            <p class="pvt__intro">Proprioceptive, visual, and tactile streams — captured in lockstep, event-segmented, QA-gated, exported in the formats your training stack already speaks.</p>
+          </div>
+
+          <div class="pvt__streams">
+            <article class="pvt__card reveal">
+              <div class="pvt__card-head">
+                <span class="pvt__letter" style="color:#3cc8ff">P</span>
+                <span class="pvt__rate">500 Hz</span>
+              </div>
+              <div class="pvt__name">Proprioceptive</div>
+              <p class="pvt__body">Joint positions, torques, currents, IMU — the robot's sense of its own body.</p>
+              <div class="sparkbars" data-color="rgba(60,200,255,0.6)" data-values="40,62,55,78,70,88,64,72,58,82,66,90"></div>
+            </article>
+
+            <article class="pvt__card reveal" data-delay="80">
+              <div class="pvt__card-head">
+                <span class="pvt__letter" style="color:#6aa6e8">V</span>
+                <span class="pvt__rate">60 fps × 4</span>
+              </div>
+              <div class="pvt__name">Visual</div>
+              <p class="pvt__body">Multi-camera RGB-D, synchronized to command ticks, drop-accounted per frame.</p>
+              <div class="sparkbars" data-color="rgba(106,166,232,0.6)" data-values="70,74,68,72,76,70,74,72,68,74,70,76"></div>
+            </article>
+
+            <article class="pvt__card reveal" data-delay="160">
+              <div class="pvt__card-head">
+                <span class="pvt__letter" style="color:#8ff0dc">T</span>
+                <span class="pvt__rate">1 kHz</span>
+              </div>
+              <div class="pvt__name">Tactile</div>
+              <p class="pvt__body">Fingertip arrays and wrist F/T — the contact truth most datasets never capture.</p>
+              <div class="sparkbars" data-color="rgba(143,240,220,0.6)" data-values="20,24,30,85,92,88,40,28,24,78,90,34"></div>
+            </article>
+          </div>
+
+          <div class="pvt__pipeline reveal" data-delay="80">
+            <div class="pvt__stage">
+              <span class="pvt__stage-num">S1</span>
+              <span class="pvt__stage-name">Ingest</span>
+              <span class="pvt__stage-sub">lockstep capture</span>
+            </div>
+            <span class="pvt__arrow">→</span>
+            <div class="pvt__stage">
+              <span class="pvt__stage-num">S2</span>
+              <span class="pvt__stage-name">Detect</span>
+              <span class="pvt__stage-sub">event segmentation</span>
+            </div>
+            <span class="pvt__arrow">→</span>
+            <div class="pvt__stage">
+              <span class="pvt__stage-num">S3</span>
+              <span class="pvt__stage-name">QA gate</span>
+              <span class="pvt__stage-sub">quarantine + review</span>
+            </div>
+            <span class="pvt__arrow">→</span>
+            <div class="pvt__stage">
+              <span class="pvt__stage-num">S4</span>
+              <span class="pvt__stage-name">Export</span>
+              <span class="pvt__stage-sub">LeRobot · RLDS · MCAP</span>
+            </div>
+            <span class="pvt__arrow">→</span>
+            <div class="pvt__stage">
+              <span class="pvt__stage-num">S5</span>
+              <span class="pvt__stage-name">Train</span>
+              <span class="pvt__stage-sub">your stack</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════ 05 HARDWARE ══════════════════════ -->
+    <section class="section hardware" id="hardware">
+      <div class="wrap">
+        <span class="ghost-num" aria-hidden="true">05</span>
+        <div class="section__split reveal">
+          <div>
+            <div class="kicker">05 — OPEN HARDWARE</div>
+            <h2 class="section__title">A complete capture stack — every layer open.</h2>
+          </div>
+          <p class="section__intro">Modular leader-follower arms and an egocentric capture rig. Build it yourself, calibrate in minutes, and start collecting demonstrations at a fraction of the usual cost.</p>
+        </div>
+
+        <div class="hw__cards">
+          <article class="hw__card reveal">
+            <span class="hw__num">01</span>
+            <h3 class="hw__title">Modular leader-follower arms</h3>
+            <p class="hw__body">6-DOF leader and follower arms you build yourself. Swap joints, links, and grippers. Calibrate in minutes, not days.</p>
+            <span class="hw__tag">HARDWARE</span>
+          </article>
+          <article class="hw__card reveal" data-delay="70">
+            <span class="hw__num">02</span>
+            <h3 class="hw__title">Egocentric collection rig</h3>
+            <p class="hw__body">Head-mounted stereo plus wrist cameras capture the operator's point of view — the perspective embodied policies actually learn from.</p>
+            <span class="hw__tag">CAPTURE</span>
+          </article>
+          <article class="hw__card reveal" data-delay="140">
+            <span class="hw__num">03</span>
+            <h3 class="hw__title">Synced MCAP recording</h3>
+            <p class="hw__body">Hardware-timestamped, multi-camera streams plus joint states written to MCAP. Frame-accurate sync, ready for training.</p>
+            <span class="hw__tag">SOFTWARE</span>
+          </article>
+          <article class="hw__card reveal" data-delay="210">
+            <span class="hw__num">04</span>
+            <h3 class="hw__title">Open-source stack</h3>
+            <p class="hw__body">CAD, firmware, drivers, and the recording pipeline — all open. Fork it, extend it, ship your own variant.</p>
+            <span class="hw__tag">OPEN</span>
+          </article>
+        </div>
+
+        <div class="hw__specs">
+          <div class="hw__spec reveal">
+            <div class="hw__spec-val">~$360<span class="hw__unit">BOM</span></div>
+            <div class="hw__spec-label">Per leader-follower pair</div>
+          </div>
+          <div class="hw__spec reveal" data-delay="60">
+            <div class="hw__spec-val">4<span class="hw__unit">cam</span></div>
+            <div class="hw__spec-label">Synchronized streams</div>
+          </div>
+          <div class="hw__spec reveal" data-delay="120">
+            <div class="hw__spec-val">6<span class="hw__unit">DOF</span></div>
+            <div class="hw__spec-label">Per arm, fully articulated</div>
+          </div>
+          <div class="hw__spec reveal" data-delay="180">
+            <div class="hw__spec-val">100<span class="hw__unit">%</span></div>
+            <div class="hw__spec-label">Open source · MIT</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════ 06 LAST CENTIMETER ══════════════════════ -->
+    <section class="section last-cm" id="last-cm">
+      <div class="wrap">
+        <span class="ghost-num" aria-hidden="true">06</span>
+        <div class="last-cm__grid">
+          <div class="reveal">
+            <div class="kicker">06 — THE LAST CENTIMETER</div>
+            <h2 class="section__title">Anyone can get close. We finish the motion.</h2>
+            <p class="last-cm__body">The last centimeter of a manipulation task — contact, compliance, grip modulation — is where policies fail and where the valuable data lives. Sub-frame timing makes that centimeter observable, trainable, and repeatable.</p>
+            <div class="last-cm__stats">
+              <div class="last-cm__stat">
+                <div class="last-cm__val">±0.4ms</div>
+                <div class="last-cm__metric">CROSS-STREAM ALIGNMENT</div>
+              </div>
+              <div class="last-cm__stat">
+                <div class="last-cm__val">1kHz</div>
+                <div class="last-cm__metric">TACTILE SAMPLING</div>
+              </div>
+              <div class="last-cm__stat">
+                <div class="last-cm__val">94.2%</div>
+                <div class="last-cm__metric">CONTACT EVENT RECALL</div>
+              </div>
+            </div>
+          </div>
+          <div class="reveal last-cm__viz-wrap" data-delay="100">
+            <div class="last-cm__viz">
+              <div class="last-cm__viz-head">
+                <span class="last-cm__viz-title">GRIPPER CONTACT PHASE</span>
+                <span class="last-cm__viz-live"><span class="last-cm__live-dot"></span>LIVE</span>
+              </div>
+              <canvas class="last-cm__canvas" id="lastCmCanvas"></canvas>
+              <div class="last-cm__stream-tags">
+                <span style="color:#3cc8ff">■ P · 500Hz</span>
+                <span style="color:#6aa6e8">■ V · 60fps</span>
+                <span style="color:#8ff0dc">■ T · 1kHz</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════ 07 SDK ══════════════════════ -->
+    <section class="section sdk" id="sdk">
+      <div class="wrap">
+        <span class="ghost-num ghost-num--left" aria-hidden="true">07</span>
+        <div class="sdk__grid">
+          <div class="reveal">
+            <div class="kicker">07 — SDK &amp; INTEGRATION</div>
+            <h2 class="section__title">A new robot is an afternoon, not a quarter.</h2>
+            <p class="sdk__body">Implement one adapter contract and the whole platform lights up: teleop, capture, QA, simulation, benchmarks.</p>
+            <div class="sdk__checks">
+              <div class="sdk__check sdk__check--ready">
+                <span class="sdk__check-name">Control contract</span>
+                <span class="sdk__status sdk__status--ready">READY</span>
+              </div>
+              <div class="sdk__check sdk__check--ready">
+                <span class="sdk__check-name">PVT stream discovery</span>
+                <span class="sdk__status sdk__status--ready">READY</span>
+              </div>
+              <div class="sdk__check sdk__check--review">
+                <span class="sdk__check-name">Sim twin mapping</span>
+                <span class="sdk__status sdk__status--review">IN REVIEW</span>
+              </div>
+              <div class="sdk__check sdk__check--pending">
+                <span class="sdk__check-name">Safety envelope certification</span>
+                <span class="sdk__status sdk__status--pending">PENDING</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="reveal sdk__code-card" data-delay="100">
+            <div class="sdk__code-bar">
+              <span class="sdk__code-file">adapters/ur10e.py</span>
+              <span class="sdk__code-ver">inhabit-sdk 0.9</span>
+            </div>
+            <pre class="sdk__pre"><span class="c"># One contract. Whole platform.</span>
+<span class="kw">from</span> inhabit <span class="kw">import</span> RobotAdapter, pvt
+
+<span class="kw">class</span> <span class="fn">UR10eAdapter</span>(RobotAdapter):
+    protocol  = <span class="str">"rtde"</span>
+    transport = <span class="str">"webrtc | lan"</span>
+    dof       = <span class="num">6</span>
+
+    <span class="kw">def</span> <span class="fn">command</span>(self, twist, grip):
+        self.rtde.servo(twist, gain=<span class="num">0.85</span>)
+
+    <span class="kw">def</span> <span class="fn">streams</span>(self):
+        <span class="kw">return</span> pvt.auto(self)  <span class="c"># P+V+T discovery</span></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══════════════════════ CTA ══════════════════════ -->
+    <section class="cta-wrap">
+      <div class="wrap">
+        <div class="cta reveal">
+          <div class="cta__glow" aria-hidden="true"></div>
+          <div class="cta__body">
+            <h2 class="cta__title">Give your robots a driver.<br>Then a dataset. Then autonomy.</h2>
+            <p class="cta__sub">See a live teleop session, the PVT pipeline behind it, and your own robot on the kernel.</p>
+            <div class="cta__actions">
+              <a class="btn btn--primary" href="mailto:hello@inhabit.dev">Request a demo</a>
+              <a class="btn btn--ghost" href="https://github.com/YoussefAnbar/Inhabit-Software" target="_blank" rel="noopener">
+                <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                View on GitHub
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <!-- FOOTER -->
   <footer class="footer">
-    <div class="wrap footer__inner">
+    <div class="wrap footer__grid">
       <div class="footer__brand">
-        <a class="nav__brand" href="#top">
-          <span class="nav__mark" aria-hidden="true"></span>
-          Inhabit
-        </a>
-        <p class="footer__tag">Teleoperation hardware for the embodied-AI era.</p>
+        <div class="footer__logo">
+          <div class="footer__logo-mark"><div class="footer__logo-dot"></div></div>
+          <span>Inhabit</span>
+        </div>
+        <p class="footer__tagline">The universal software layer for robots. Teleoperation, PVT data, and simulation-first validation on one kernel.</p>
+        <div class="footer__copy">© <span id="year"></span> INHABIT ROBOTICS, INC.</div>
       </div>
-      <nav class="footer__links" aria-label="Footer">
-        <a href="https://github.com/" target="_blank" rel="noopener">GitHub</a>
+
+      <div class="footer__col">
+        <div class="footer__col-head">PLATFORM</div>
+        <a href="#kernel">Teleop Kernel</a>
+        <a href="#data">PVT Data Platform</a>
+        <a href="#hardware">Hardware</a>
+        <a href="#sdk">SDK</a>
+      </div>
+
+      <div class="footer__col">
+        <div class="footer__col-head">COMPANY</div>
+        <a href="mailto:hello@inhabit.dev">Contact</a>
+        <a href="#">Careers</a>
+        <a href="#">Vision</a>
+      </div>
+
+      <div class="footer__col">
+        <div class="footer__col-head">RESOURCES</div>
+        <a href="https://github.com/YoussefAnbar/Inhabit-Software" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/YoussefAnbar/Inhabit-Software/blob/main/README.md" target="_blank" rel="noopener">Documentation</a>
         <a href="mailto:hello@inhabit.dev">hello@inhabit.dev</a>
-        <a href="#top">Back to top</a>
-      </nav>
-    </div>
-    <div class="wrap footer__base">
-      <span>© <span id="year"></span> Inhabit. Open source under the MIT License.</span>
-      <span class="footer__loc">Built for the physical-AI era.</span>
+      </div>
     </div>
   </footer>
 
