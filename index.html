@@ -39,7 +39,7 @@
         <a href="#sdk">SDK</a>
       </nav>
       <div class="nav__actions">
-        <a class="btn btn--ghost btn--sm" href="https://github.com/YoussefAnbar/Inhabit-Software" target="_blank" rel="noopener">
+        <a class="btn btn--ghost btn--sm" href="https://github.com/lukelul/inhabit" target="_blank" rel="noopener">
           <svg viewBox="0 0 16 16" width="13" height="13" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
           GitHub
         </a>
@@ -64,7 +64,7 @@
         <p class="hero__sub reveal">One kernel to drive any robot. One pipeline to turn every session into manufacturable-grade data.</p>
         <div class="hero__cta reveal">
           <a class="btn btn--primary" href="mailto:hello@inhabit.dev">Request a demo →</a>
-          <a class="btn btn--ghost" href="https://github.com/YoussefAnbar/Inhabit-Software" target="_blank" rel="noopener">
+          <a class="btn btn--ghost" href="https://github.com/lukelul/inhabit" target="_blank" rel="noopener">
             <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
             View on GitHub
           </a>
@@ -103,8 +103,8 @@
             <h3 class="pillar__title">PVT data engine</h3>
             <p class="pillar__body">Proprioceptive, visual, and tactile streams captured in lockstep. Event detection segments episodes automatically; QA gates keep the dataset manufacturable-grade.</p>
             <div class="pillar__foot">
-              <span class="pillar__stat">±0.4ms</span>
-              <span class="pillar__stat-label">STREAM ALIGNMENT</span>
+              <span class="pillar__stat">0.2ms</span>
+              <span class="pillar__stat-label">MAX OFFSET UNDER CAN JITTER</span>
             </div>
           </article>
 
@@ -353,19 +353,19 @@
           <div class="reveal">
             <div class="kicker">The last centimeter</div>
             <h2 class="section__title">Anyone can get close. We finish the motion.</h2>
-            <p class="last-cm__body">The last centimeter of a manipulation task — contact, compliance, grip modulation — is where policies fail and where the valuable data lives. Sub-frame timing makes that centimeter observable, trainable, and repeatable.</p>
+            <p class="last-cm__body">The last centimeter of a manipulation task — contact, compliance, grip modulation — is where policies fail and where the valuable data lives. Sub-frame timing makes that centimeter observable, trainable, and repeatable. A seeded chaos bench injects clock skew, dropped frames, and burst stalls against the alignment engine — when a stream can't be trusted, the pipeline quarantines it instead of silently shipping corrupted data.</p>
             <div class="last-cm__stats">
               <div class="last-cm__stat">
-                <div class="last-cm__val">±0.4ms</div>
-                <div class="last-cm__metric">CROSS-STREAM ALIGNMENT</div>
+                <div class="last-cm__val">0.2ms</div>
+                <div class="last-cm__metric">MAX OFFSET UNDER CAN JITTER</div>
               </div>
               <div class="last-cm__stat">
                 <div class="last-cm__val">1kHz</div>
                 <div class="last-cm__metric">TACTILE SAMPLING</div>
               </div>
               <div class="last-cm__stat">
-                <div class="last-cm__val">94.2%</div>
-                <div class="last-cm__metric">CONTACT EVENT RECALL</div>
+                <div class="last-cm__val">5/5</div>
+                <div class="last-cm__metric">TIMING-GATE SCENARIOS PASSED</div>
               </div>
             </div>
           </div>
@@ -448,7 +448,7 @@
             <p class="cta__sub">See a live teleop session, the PVT pipeline behind it, and your own robot on the kernel.</p>
             <div class="cta__actions">
               <a class="btn btn--primary" href="mailto:hello@inhabit.dev">Request a demo</a>
-              <a class="btn btn--ghost" href="https://github.com/YoussefAnbar/Inhabit-Software" target="_blank" rel="noopener">
+              <a class="btn btn--ghost" href="https://github.com/lukelul/inhabit" target="_blank" rel="noopener">
                 <svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
                 View on GitHub
               </a>
@@ -489,8 +489,8 @@
 
       <div class="footer__col">
         <div class="footer__col-head">RESOURCES</div>
-        <a href="https://github.com/YoussefAnbar/Inhabit-Software" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://github.com/YoussefAnbar/Inhabit-Software/blob/main/README.md" target="_blank" rel="noopener">Documentation</a>
+        <a href="https://github.com/lukelul/inhabit" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://github.com/lukelul/inhabit/tree/main/software/docs" target="_blank" rel="noopener">Documentation</a>
         <a href="mailto:hello@inhabit.dev">hello@inhabit.dev</a>
       </div>
     </div>
