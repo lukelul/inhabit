@@ -1,0 +1,35 @@
+# CodeRabbit config — Inhabit (embedded C firmware + ROS 2 Python host)
+# Lives in repo root, on the default branch. Docs: https://docs.coderabbit.ai
+language: en-US
+early_access: false
+reviews:
+  profile: assertive            # thorough, opinionated reviews
+  request_changes_workflow: true
+  high_level_summary: true
+  poem: false
+  review_status: true
+  auto_review:
+    enabled: true
+    drafts: false
+  path_instructions:
+    - path: "firmware/**"
+      instructions: >
+        Embedded C for STM32C011. ENFORCE: no dynamic allocation after init; no
+        blocking calls in ISRs (ISRs set flags, main loop acts); CAN frames must
+        match schema v1 (ID 0x100+node_id, little-endian, XOR checksum in byte 7);
+        faults must set status_flags, never hang silently; encoder ADC must be
+        filtered. FLAG any pin/peripheral use that assumes the unverified MCP2515
+        INT pin (A3 vs B6). Lead each finding with the real-hardware failure it causes.
+    - path: "host/**"
+      instructions: >
+        ROS 2 Jazzy + Python 3.11. ENFORCE: robot-specific logic only behind the
+        RobotAdapter interface (no isinstance on robot types in core); timestamps
+        monotonic and time-sync preserved; PVT/CAN schema changes must be versioned
+        with migrations; type hints + ruff + mypy clean; deliberate QoS.
+    - path: "**/*.py"
+      instructions: "Require type hints. Prefer stdlib over new deps (ponytail rule)."
+  tools:
+    ruff:
+      enabled: true
+chat:
+  auto_reply: true

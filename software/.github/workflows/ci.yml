@@ -1,0 +1,20 @@
+name: verify
+on:
+  push: { branches: [main] }
+  pull_request:
+  workflow_dispatch:
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11" }
+      - run: pip install pytest pytest-cov ruff mypy "pyarrow>=16"
+      # Firmware C tests + host pytest (tests block here).
+      - run: bash scripts/verify.sh
+      # CI enforces lint + types as hard gates (advisory only in the local Stop hook).
+      - name: ruff (blocking)
+        run: cd host && ruff check .
+      - name: mypy strict (blocking)
+        run: cd host && mypy .

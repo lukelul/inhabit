@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inhabit · Nexus Brain Map</title>
+<style>
+  :root{
+    --bg:#0a0e14; --panel:#0f1620; --panel2:#131c28; --line:#1f2b3a;
+    --txt:#cdd9e5; --dim:#8295a8; --blue:#5aa9ff; --cyan:#46e0d0;
+    --green:#5ad27f; --amber:#f0b54a; --red:#ff6b6b; --violet:#b18cff;
+    --mono:"SF Mono",ui-monospace,"JetBrains Mono",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:radial-gradient(1200px 700px at 50% -10%,#10202f 0%,var(--bg) 60%);
+    color:var(--txt);font-family:var(--mono);line-height:1.5;padding:32px 18px 64px}
+  .wrap{max-width:1180px;margin:0 auto}
+  header h1{font-size:30px;letter-spacing:3px;margin:0;color:#fff}
+  header h1 b{color:var(--cyan)}
+  header .sub{color:var(--blue);margin:6px 0 2px;letter-spacing:1px}
+  header .meta{color:var(--dim);font-size:12.5px}
+  .pill{display:inline-block;border:1px solid var(--line);border-radius:20px;
+    padding:2px 10px;font-size:11px;color:var(--dim);margin:8px 6px 0 0}
+  .pill b{color:var(--green)}
+
+  /* flow strip */
+  .flow{display:flex;align-items:stretch;gap:8px;margin:26px 0 8px;flex-wrap:wrap}
+  .flow .node{flex:1;min-width:120px;background:var(--panel);border:1px solid var(--line);
+    border-radius:12px;padding:12px 12px;position:relative}
+  .flow .node .k{font-size:11px;color:var(--dim);letter-spacing:1px}
+  .flow .node .v{font-size:13px;color:#fff;margin-top:3px}
+  .flow .arr{align-self:center;color:var(--blue);font-size:18px}
+  .flow .node.wedge{border-color:var(--amber);box-shadow:0 0 0 1px var(--amber) inset}
+  .flow .node.wedge .v{color:var(--amber)}
+
+  .legend{color:var(--dim);font-size:12px;margin:2px 0 22px}
+  .legend b{color:var(--amber)}
+
+  h2{font-size:13px;letter-spacing:2px;color:var(--blue);text-transform:uppercase;
+    border-bottom:1px solid var(--line);padding-bottom:7px;margin:30px 0 14px}
+  h2 span{color:var(--dim);font-weight:normal;letter-spacing:0}
+
+  .grid{display:grid;gap:11px}
+  .g4{grid-template-columns:repeat(4,1fr)}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  @media(max-width:820px){.g4,.g3,.g2{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:520px){.g4,.g3,.g2{grid-template-columns:1fr}}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+    padding:13px 14px;cursor:pointer;transition:.15s;position:relative;overflow:hidden}
+  .card:hover{border-color:var(--blue);transform:translateY(-2px);background:var(--panel2)}
+  .card .tag{font-size:10.5px;letter-spacing:1px;color:var(--dim);text-transform:uppercase}
+  .card .name{font-size:14.5px;color:#fff;margin:4px 0 4px}
+  .card .desc{font-size:12px;color:var(--dim);max-height:0;opacity:0;transition:.2s}
+  .card.open .desc{max-height:320px;opacity:1;margin-top:6px}
+  .card .cmd{font-size:11.5px;color:var(--cyan)}
+  .card.mine::before,.card.pony::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px}
+  .card.mine::before{background:var(--cyan)}
+  .card.pony::before{background:var(--violet)}
+  .card.agent::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--green)}
+  .card.contract{border-style:dashed;border-color:var(--amber)}
+  .card.contract .name{color:var(--amber)}
+
+  .road{display:flex;gap:8px;flex-wrap:wrap}
+  .road .ph{flex:1;min-width:150px;background:var(--panel);border:1px solid var(--line);
+    border-radius:10px;padding:11px 12px}
+  .road .ph .p{color:var(--green);font-size:12px;letter-spacing:1px}
+  .road .ph .t{color:#fff;font-size:13px;margin:3px 0}
+  .road .ph .d{color:var(--dim);font-size:11.5px}
+  .road .ph.now{border-color:var(--amber);box-shadow:0 0 14px -6px var(--amber)}
+  .road .ph.now .p{color:var(--amber)}
+
+  .levels{counter-reset:lv}
+  .lv{display:flex;gap:12px;align-items:flex-start;background:var(--panel);
+    border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:8px}
+  .lv .n{flex:0 0 34px;height:34px;border-radius:8px;background:var(--panel2);
+    border:1px solid var(--line);display:flex;align-items:center;justify-content:center;
+    color:var(--blue);font-size:15px}
+  .lv.done .n{color:var(--green);border-color:var(--green)}
+  .lv .body .h{color:#fff;font-size:13.5px}
+  .lv .body .h em{color:var(--dim);font-style:normal;font-size:12px}
+  .lv .body .x{color:var(--dim);font-size:12px;margin-top:2px}
+
+  .term{background:#070b10;border:1px solid var(--line);border-radius:12px;
+    padding:16px 18px;margin-top:14px;font-size:13px;overflow:auto}
+  .term .c{color:var(--green)} .term .p{color:var(--violet)} .term .h{color:var(--dim)}
+  footer{color:var(--dim);font-size:11.5px;margin-top:34px;text-align:center}
+  .hint{color:var(--dim);font-size:12px;margin:6px 0 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>INHABIT · <b>NEXUS</b> BRAIN</h1>
+    <div class="sub">Universal Teleoperation Kernel — Level&nbsp;6 Claude setup</div>
+    <div class="meta">The joint pod is the physical API · the data engine is the business · the last centimeter is the wedge</div>
+    <div>
+      <span class="pill"><b>12</b> skills</span>
+      <span class="pill"><b>6</b> agents</span>
+      <span class="pill"><b>5</b> commands</span>
+      <span class="pill"><b>3</b> contracts</span>
+      <span class="pill">brain: <b>.claude/CLAUDE.md</b></span>
+      <span class="pill">ROS&nbsp;2 <b>Jazzy</b></span>
+    </div>
+    <p class="hint">Tap any card to expand. This is a live picture of what Claude knows about your project.</p>
+  </header>
+
+  <!-- DATA FLOW -->
+  <div class="flow">
+    <div class="node"><div class="k">HUMAN</div><div class="v">Operator motion via modular master arm</div></div>
+    <div class="arr">→</div>
+    <div class="node"><div class="k">JOINT PODS</div><div class="v">MT6701 → STM32 → CAN daisy chain</div></div>
+    <div class="arr">→</div>
+    <div class="node"><div class="k">HOST · ROS 2</div><div class="v">CAN bridge + RobotAdapter</div></div>
+    <div class="arr">→</div>
+    <div class="node wedge"><div class="k">PVT DATASET</div><div class="v">Proprioceptive·Visual·Tactile — the last centimeter</div></div>
+    <div class="arr">→</div>
+    <div class="node"><div class="k">OUTPUT</div><div class="v">ML-ready robot world-model data</div></div>
+  </div>
+  <div class="legend">Legend: <span style="color:var(--cyan)">▍</span> Inhabit skill &nbsp; <span style="color:var(--violet)">▍</span> Ponytail (lazy-dev) skill &nbsp; <span style="color:var(--green)">▍</span> agent &nbsp; <b>▍ contract (locked, version-controlled)</b></div>
+
+  <!-- CONTRACTS -->
+  <h2>The Contracts <span>— lock these before any parallel work</span></h2>
+  <div class="grid g3" id="contracts"></div>
+
+  <!-- SKILLS -->
+  <h2>Skills <span>— your workflows, invoked by name (Level 5)</span></h2>
+  <div class="grid g4" id="skills"></div>
+
+  <!-- AGENTS -->
+  <h2>Agents <span>— your team, dispatched in parallel (Level 6)</span></h2>
+  <div class="grid g3" id="agents"></div>
+
+  <!-- COMMANDS -->
+  <h2>Slash Commands <span>— one-line entry points</span></h2>
+  <div class="grid g4" id="commands"></div>
+
+  <!-- HARDWARE -->
+  <h2>Hardware Stack <span>— Rev-A smart joint sensor node</span></h2>
+  <div class="grid g4" id="hardware"></div>
+
+  <!-- ROADMAP -->
+  <h2>Roadmap</h2>
+  <div class="road" id="road"></div>
+
+  <!-- LEVELS -->
+  <h2>The 6 Levels <span>— all stacked in this setup</span></h2>
+  <div class="levels" id="levels"></div>
+
+  <!-- TERMINAL -->
+  <h2>Open the terminal — you're ready to make</h2>
+  <div class="term">
+<span class="h"># 1. go to the project</span>
+<span class="c">cd</span> "C:\Users\youss\OneDrive\Documents\Altium_Projects\Inhabit-Software"
+<span class="h"># 2. start Claude in the repo (the brain auto-loads)</span>
+<span class="c">claude</span>
+<span class="h"># 3. confirm your team + commands are live</span>
+<span class="p">/agents</span>   <span class="h"># 6 agents</span>
+<span class="p">/</span>         <span class="h"># /bringup /can-msg /ros2-node /review-firmware /orchestrate</span>
+<span class="h"># 4. add the full Ponytail plugin (hooks + mode switches)</span>
+<span class="p">/plugin</span> marketplace add DietrichGebert/ponytail
+<span class="p">/plugin</span> install ponytail@ponytail
+<span class="h"># 5. your first real move</span>
+<span class="p">/orchestrate</span> "bring CAN telemetry up across two boards and log it"
+  </div>
+
+  <footer>Nexus brain installed at <b>.claude/</b> · committed to git · Ponytail skills active.
+  &nbsp;Keep it lean — six curated skills beat a thousand generic ones.</footer>
+</div>
+
+<script>
+const DATA = {
+  contracts:[
+    {tag:"frozen v1",name:"CAN schema",desc:"ID 0x100+node_id, 8-byte payload: angle_raw, angle_millideg, node_id, chain_index, status_flags, XOR checksum. Verified on 10,000 round-trip frames. New telemetry = new ID block, never repurposed bytes."},
+    {tag:"interface",name:"RobotAdapter",desc:"connect / read_state / send_command / capabilities. Every robot (custom CAN, ROS2, UR, KUKA, Franka, sim) speaks through this. Core code never branches on robot type."},
+    {tag:"schema",name:"PVT sample",desc:"Time-aligned Proprioceptive + Visual + Tactile triplet per episode. Monotonic clock, measured jitter, atomic append-only episodes, versioned fields. This is the dataset that IS the business."}
+  ],
+  skills:[
+    {c:"mine",tag:"firmware",name:"stm32-firmware",desc:"Bare-metal STM32C011: encoder ADC, MCP2515 SPI/CAN, EXTI/ISRs, status flags. No heap after init, no blocking in ISRs, loopback before live bus."},
+    {c:"mine",tag:"protocol",name:"can-protocol",desc:"Define/extend CAN messages with byte-for-byte matching C + Python codecs and round-trip + bit-flip tests."},
+    {c:"mine",tag:"ros 2",name:"ros2-node",desc:"Scaffold Jazzy nodes/packages, launch files, deliberate QoS, and the RobotAdapter plugin interface."},
+    {c:"mine",tag:"bench",name:"pcb-bringup",desc:"One-stage-at-a-time bring-up procedure + failure tree: power, encoder, CAN loopback, live CAN, 2-board chain, ENUM."},
+    {c:"mine",tag:"data",name:"pvt-data-logger",desc:"Episode recording, time-sync, contact-event detection, ML-ready export. Quality over quantity; last-centimeter focus."},
+    {c:"mine",tag:"review",name:"embedded-review",desc:"Hardware-aware diff review against the house rules. Verdict BLOCK/FIX/OK with the real-hardware failure each issue causes."},
+    {c:"pony",tag:"lazy dev",name:"ponytail",desc:"Forces the simplest solution that works — YAGNI, stdlib first, one line over fifty. Levels: lite / full / ultra. ~54% less code, 100% safe."},
+    {c:"pony",tag:"lazy dev",name:"ponytail-review",desc:"Reviews the current diff for over-engineering and hands back a delete-list."},
+    {c:"pony",tag:"lazy dev",name:"ponytail-audit",desc:"Audits the whole repo for over-engineering, not just the diff."},
+    {c:"pony",tag:"lazy dev",name:"ponytail-debt",desc:"Harvests deferred 'ponytail:' shortcuts into a ledger so 'later' doesn't become 'never'."},
+    {c:"pony",tag:"lazy dev",name:"ponytail-gain",desc:"Shows the measured impact scoreboard: less code, less cost, more speed."},
+    {c:"pony",tag:"lazy dev",name:"ponytail-help",desc:"Quick reference for the ponytail commands."}
+  ],
+  agents:[
+    {tag:"track: firmware",name:"firmware-engineer",desc:"Owns firmware/. STM32 register work. Never guesses a pin — confirms against the schematic or stops."},
+    {tag:"track: host",name:"ros2-integrator",desc:"Owns host/ ROS 2. Thin nodes, testable logic, everything behind RobotAdapter."},
+    {tag:"track: data",name:"data-pipeline-engineer",desc:"Owns the dataset. Time-sync first, atomic episodes, versioned schema, reproducible contact labels."},
+    {tag:"track: bench",name:"hardware-bringup",desc:"Physical board bring-up. One stage at a time, verified on instruments, logged."},
+    {tag:"gate",name:"embedded-reviewer",desc:"Adversarial reviewer. Runs before every merge. Finds what breaks on real hardware."},
+    {tag:"support",name:"research-scout",desc:"Cited research: datasheets, ROS docs, robot-learning papers — without polluting main context."}
+  ],
+  commands:[
+    {name:"/bringup",desc:"Guided next-stage hardware bring-up via the pcb-bringup skill + hardware agent."},
+    {name:"/can-msg",desc:"Define/extend a CAN message and generate matching C + Python codecs and tests."},
+    {name:"/ros2-node",desc:"Scaffold a new ROS 2 Jazzy node/package following Inhabit conventions."},
+    {name:"/review-firmware",desc:"Adversarial review of the pending diff before merge."},
+    {name:"/orchestrate",desc:"Decompose a goal into parallel tracks and dispatch agents to worktrees (Level 6)."}
+  ],
+  hardware:[
+    {tag:"encoder",name:"MT6701",desc:"Magnetic absolute angle, analog out → STM32 ADC (A0). Magnet alignment is critical."},
+    {tag:"mcu",name:"STM32C011",desc:"Local intelligence. Reads encoder, drives SPI, runs the enumeration state machine."},
+    {tag:"can ctrl",name:"MCP2515",desc:"SPI→CAN, 16 MHz crystal. Prove in loopback first. INT pin A3-vs-B6 still UNVERIFIED."},
+    {tag:"transceiver",name:"SN65HVD230",desc:"Logic-level CAN → physical CANH/CANL differential bus. 120Ω termination at bus ends."},
+    {tag:"protection",name:"SM24CANB TVS",desc:"Protects the bus from ESD/transients during plug/unplug near motors."},
+    {tag:"bus",name:"5-wire chain",desc:"5V5 · GND · CANH · CANL · ENUM. ENUM line orders identical pods into a kinematic chain."}
+  ],
+  road:[
+    {p:"P1",t:"Board bring-up",d:"power, encoder ADC, flash",now:true},
+    {p:"P2",t:"CAN bring-up",d:"MCP2515 SPI, first frame"},
+    {p:"P3",t:"2+ board chain",d:"shared bus, ENUM ordering"},
+    {p:"P4",t:"Passive master arm",d:"3–7 pods, motion capture"},
+    {p:"P5",t:"ML data logger",d:"episodes + video sync"},
+    {p:"P6",t:"Last-centimeter",d:"MEMS mic, contact detection"}
+  ],
+  levels:[
+    {n:1,done:true,h:"The Prompter <em>— clear, specific prompts</em>",x:"Be concrete: schema v1, little-endian, with checksum + test."},
+    {n:2,done:true,h:"The Conversationalist <em>— iterate on real evidence</em>",x:"Feed scope traces and CANSTAT values, don't one-shot silicon."},
+    {n:3,done:true,h:"The Context Engineer <em>— lean brain</em>",x:"CLAUDE.md + per-folder memory. Detail lives in skills. Prune ruthlessly."},
+    {n:4,done:true,h:"The Toolsmith <em>— surgical MCPs</em>",x:"GitHub, Exa, Microsoft Learn, alphaXiv — only what a track needs."},
+    {n:5,done:true,h:"The Skilled <em>— Claude becomes yours</em>",x:"12 skills + 5 commands encode your standards. Ponytail keeps it lean."},
+    {n:6,done:true,h:"The Orchestrator <em>— you're the manager</em>",x:"6 agents in parallel worktrees, gated by the reviewer, bound by the contracts."}
+  ]
+};
+function card(o){
+  const cls = o.c==="contract" ? "card contract" : "card "+(o.c||"");
+  return `<div class="${cls}" onclick="this.classList.toggle('open')">
+    ${o.tag?`<div class="tag">${o.tag}</div>`:""}
+    <div class="${o.name[0]==='/'?'cmd name':'name'}">${o.name}</div>
+    <div class="desc">${o.desc}</div></div>`;
+}
+contracts.innerHTML = DATA.contracts.map(o=>card({...o,c:"contract"})).join("");
+skills.innerHTML    = DATA.skills.map(card).join("");
+agents.innerHTML    = DATA.agents.map(o=>card({...o,c:"agent"})).join("");
+commands.innerHTML  = DATA.commands.map(card).join("");
+hardware.innerHTML  = DATA.hardware.map(card).join("");
+road.innerHTML      = DATA.road.map(p=>`<div class="ph ${p.now?'now':''}"><div class="p">${p.p}${p.now?' · NOW':''}</div><div class="t">${p.t}</div><div class="d">${p.d}</div></div>`).join("");
+levels.innerHTML    = DATA.levels.map(l=>`<div class="lv ${l.done?'done':''}"><div class="n">${l.done?'✓':l.n}</div><div class="body"><div class="h">L${l.n} · ${l.h}</div><div class="x">${l.x}</div></div>`).join("");
+</script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+# The committed .canlog fixture is a byte-exact regression baseline: a test asserts
+# it stays byte-identical to its generator (FileRecorder writes LF). Pin LF and
+# disable EOL conversion so it round-trips identically on every platform/checkout
+# regardless of core.autocrlf.
+*.canlog text eol=lf
+# The committed contact-scenario golden JSON is likewise a byte-exact baseline: a test
+# asserts it stays byte-identical to make_scenario_fixture (which writes LF). Pin LF so the
+# committed bytes round-trip identically on every platform/checkout.
+*.scenario.json text eol=lf
+# The committed golden sim episode is a byte-exact baseline for the whole B2-B5 sim stack: a
+# test asserts it stays byte-identical to make_sim_fixture (which writes LF). Pin LF so the
+# committed bytes round-trip identically on every platform/checkout.
+*.episode.txt text eol=lf

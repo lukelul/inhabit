@@ -1,0 +1,109 @@
+[project]
+name = "inhabit-can"
+version = "0.1.0"
+description = "Inhabit host: CAN codec, robot adapters, PVT logging"
+requires-python = ">=3.11"
+dependencies = [
+    "pyarrow>=16",  # ML-ready parquet export for PVT episodes (lerobot/HF datasets ingestible)
+]
+
+[tool.ruff]
+line-length = 100
+
+[tool.ruff.lint]
+# Union of the bridge (host) and logger (data) track rule sets.
+select = ["E", "F", "I", "UP", "B", "PLC", "RUF"]
+
+# codec.py is FROZEN (byte-identical with firmware); test_codec.py predates this
+# lint config. Don't reformat them here — out of scope for the data-pipeline track.
+[tool.ruff.lint.per-file-ignores]
+"inhabit_can/codec.py" = ["I001"]
+"inhabit_can/adapter.py" = ["I001"]
+"tests/test_codec.py" = ["I001", "F401", "B007", "E702", "PLC0415"]
+"tests/test_dataset_roundtrip.py" = ["I001", "E402", "PLC0415"]
+"tests/test_dataset_readiness.py" = ["I001", "E402", "PLC0415"]
+"tests/test_ultracode_dataset_gate.py" = ["PLC0415"]
+"tools/dataset/__main__.py" = ["I001", "PLC0415", "E501"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+addopts = "--cov"
+
+# --- Coverage gate (P-A/A8) -------------------------------------------------
+# Ratcheting floor enforced by CI + the local verify scripts. Measure with:
+#   cd host && python -m pytest --cov --cov-report=term-missing
+# Honest baseline @ P-A close: 91% branch / 92% statement (dev: win32/py3.13).
+# fail_under is the enforced floor (target 90%, absorbs Ubuntu/py3.11 CI drift);
+# ratchet UP toward 95 as coverage climbs — never lower it, never delete a test to game it.
+[tool.coverage.run]
+branch = true
+source = [
+    "adapters", "events", "export", "inhabit_bridge", "inhabit_can",
+    "inhabit_core", "inhabit_description", "logger", "sensors", "sim", "timing",
+    "transport", "viz", "tools",
+]
+omit = [
+    "*/tests/*",       # test files are ~100% by construction — not product coverage
+    "*/test_*.py",
+    "*/setup.py",      # ROS ament build shims (also excluded from mypy)
+    "inhabit_msgs/*",  # generated ROS interface stubs
+]
+
+[tool.coverage.report]
+show_missing = true
+precision = 1
+fail_under = 90
+exclude_also = [
+    "if TYPE_CHECKING:",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "@(abc\\.)?abstractmethod",
+]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+warn_unused_ignores = false
+# ROS ament build scripts import untyped setuptools; not part of our typed surface.
+exclude = ['(^|/)setup\.py$']
+# The test suite imports the fixture generator as ``tests.fixtures.make_sample_canlog``
+# while the fixtures dir is also a search root, so mypy would otherwise see the file
+# under two module names. Anchor the single package base at host/ (this dir) so the
+# dotted path is unambiguous, without adding a ``tests/__init__.py`` (which would flip
+# pytest's import mode and break the repo-root ``tools`` imports in other tests).
+mypy_path = "."
+explicit_package_bases = true
+namespace_packages = true
+
+# pyarrow ships partial/loose type info, and ROS 2 (Jazzy) packages are not
+# installed in this dev/CI sandbox (resolved at runtime on a Jazzy host).
+# Ignore their missing/loose stubs without relaxing our own strictness.
+[[tool.mypy.overrides]]
+module = [
+    "pyarrow.*",
+    "rclpy.*",
+    "launch",
+    "launch.*",
+    "launch_ros",
+    "launch_ros.*",
+    "inhabit_msgs.*",
+    "can",
+    "can.*",
+    "sensor_msgs.*",
+    # repo-root utility scripts (e.g. MT6701 calibrate); outside the host typed surface.
+    "tools",
+    "tools.*",
+]
+ignore_missing_imports = true
+
+# These modules touch pyarrow's loosely-typed API directly (parquet_io/export are the
+# production seams; the dataset-gate test reads a raw parquet column to assert the
+# on-disk episode_index is dense). Allow their untyped calls without relaxing
+# strictness anywhere else.
+[[tool.mypy.overrides]]
+module = ["logger.parquet_io", "export.lerobot", "tests.test_ultracode_dataset_gate"]
+disable_error_code = ["no-untyped-call"]
+
+[[tool.mypy.overrides]]
+module = ["tools.*"]
+ignore_missing_imports = true

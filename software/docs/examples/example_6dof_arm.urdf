@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!--
+  Reference shape example only, not a real Inhabit arm.
+
+  Illustrates the URDF shape inhabit_description.urdf.parse_urdf expects from an
+  SW2URDF export of a 6 DOF serial arm: one root link with no parent joint, a single
+  unbranched chain of revolute joints (base to end effector), each with a limit.
+  See .claude/skills/cad-import/SKILL.md for the full export workflow.
+
+  Try it: from host/, run the urdf_import CLI's describe mode on this file
+  (see .claude/skills/cad-import/SKILL.md for the exact command).
+-->
+<robot name="example_6dof_arm">
+  <link name="base_link"/>
+  <link name="link1"/>
+  <link name="link2"/>
+  <link name="link3"/>
+  <link name="link4"/>
+  <link name="link5"/>
+  <link name="link6"/>
+
+  <joint name="joint1" type="revolute">
+    <parent link="base_link"/>
+    <child link="link1"/>
+    <axis xyz="0 0 1"/>
+    <origin xyz="0 0 0.05" rpy="0 0 0"/>
+    <limit lower="-3.14159" upper="3.14159" velocity="2.0" effort="10.0"/>
+  </joint>
+  <joint name="joint2" type="revolute">
+    <parent link="link1"/>
+    <child link="link2"/>
+    <axis xyz="0 1 0"/>
+    <origin xyz="0 0 0.10" rpy="0 0 0"/>
+    <limit lower="-1.5708" upper="1.5708" velocity="2.0" effort="10.0"/>
+  </joint>
+  <joint name="joint3" type="revolute">
+    <parent link="link2"/>
+    <child link="link3"/>
+    <axis xyz="0 1 0"/>
+    <origin xyz="0 0 0.20" rpy="0 0 0"/>
+    <limit lower="-2.5" upper="2.5" velocity="2.0" effort="10.0"/>
+  </joint>
+  <joint name="joint4" type="revolute">
+    <parent link="link3"/>
+    <child link="link4"/>
+    <axis xyz="1 0 0"/>
+    <origin xyz="0 0 0.20" rpy="0 0 0"/>
+    <limit lower="-3.14159" upper="3.14159" velocity="3.0" effort="5.0"/>
+  </joint>
+  <joint name="joint5" type="revolute">
+    <parent link="link4"/>
+    <child link="link5"/>
+    <axis xyz="0 1 0"/>
+    <origin xyz="0 0 0.05" rpy="0 0 0"/>
+    <limit lower="-1.9" upper="1.9" velocity="3.0" effort="5.0"/>
+  </joint>
+  <joint name="joint6" type="revolute">
+    <parent link="link5"/>
+    <child link="link6"/>
+    <axis xyz="1 0 0"/>
+    <origin xyz="0 0 0.05" rpy="0 0 0"/>
+    <limit lower="-3.14159" upper="3.14159" velocity="3.0" effort="2.0"/>
+  </joint>
+</robot>

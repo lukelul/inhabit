@@ -1,0 +1,19 @@
+# GitNexus local index / cache
+.gitnexus/
+.nexus/
+# build artifacts
+build/
+install/
+log/
+__pycache__/
+*.pyc
+# coverage artifacts (pytest-cov)
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+# firmware host-test binaries (run_test, run_test_mcp2515, run_test_bench3, ...)
+firmware/test/run_test*
+.venv/
+venv/
+node_modules/

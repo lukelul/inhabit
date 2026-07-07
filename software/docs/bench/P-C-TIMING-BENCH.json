@@ -1,0 +1,560 @@
+{
+  "bench_version": 1,
+  "episode_seed": 7,
+  "gate_failures": [],
+  "gate_mode": "default",
+  "gate_passed": true,
+  "regenerate": "cd host && python -m timing.bench --scenario slip_recovery --seed 7 --out <output-dir>",
+  "reports": [
+    {
+      "contact_event_accuracy": 1.0,
+      "contact_events_matched": 25,
+      "contact_events_total": 25,
+      "episode_gate_passed": true,
+      "episode_gate_reasons": [],
+      "episode_seed": 7,
+      "exported_samples": 141,
+      "fixture": null,
+      "flagged_records": 0,
+      "lerobot_roundtrip_ok": true,
+      "max_abs_offset_ns": 20000000,
+      "mean_abs_offset_ns": 10106382.978723405,
+      "monotonicity_violations": 0,
+      "name": "clean_baseline",
+      "non_matched_results": 0,
+      "p95_abs_offset_ns": 10000000,
+      "p99_abs_offset_ns": 20000000,
+      "parquet_roundtrip_ok": true,
+      "replay_deterministic": true,
+      "scenario": "slip_recovery",
+      "streams": {
+        "contact_events": {
+          "delivered": 25,
+          "input": 25,
+          "surviving": 25
+        },
+        "frames": {
+          "delivered": 47,
+          "input": 47,
+          "surviving": 47
+        },
+        "proprio": {
+          "delivered": 47,
+          "input": 47,
+          "surviving": 47
+        },
+        "tactile": {
+          "delivered": 47,
+          "input": 47,
+          "surviving": 47
+        }
+      },
+      "timing_meta": {
+        "budget": {
+          "max_skew_ns": 20000000,
+          "window_ns": 30000000
+        },
+        "modalities": {
+          "contact_events": {
+            "clean_count": 25,
+            "clock_domain": "monotonic",
+            "flag_counts": {},
+            "flagged_count": 0,
+            "method_counts": {
+              "window": 50
+            },
+            "offset_max_ns": 10000000,
+            "offset_mean_ns": -5000000.0,
+            "offset_min_ns": -20000000,
+            "quality_counts": {
+              "matched": 50
+            }
+          },
+          "frames": {
+            "clean_count": 47,
+            "clock_domain": "monotonic",
+            "flag_counts": {},
+            "flagged_count": 0,
+            "method_counts": {
+              "nearest": 47
+            },
+            "offset_max_ns": 20000000,
+            "offset_mean_ns": -9361702.127659574,
+            "offset_min_ns": -10000000,
+            "quality_counts": {
+              "matched": 47
+            }
+          },
+          "proprio": {
+            "clean_count": 47,
+            "clock_domain": "monotonic",
+            "flag_counts": {},
+            "flagged_count": 0,
+            "method_counts": {},
+            "offset_max_ns": null,
+            "offset_mean_ns": null,
+            "offset_min_ns": null,
+            "quality_counts": {}
+          },
+          "tactile": {
+            "clean_count": 47,
+            "clock_domain": "monotonic",
+            "flag_counts": {},
+            "flagged_count": 0,
+            "method_counts": {
+              "nearest": 47
+            },
+            "offset_max_ns": 10000000,
+            "offset_mean_ns": 10000000.0,
+            "offset_min_ns": 10000000,
+            "quality_counts": {
+              "matched": 47
+            }
+          }
+        },
+        "timing_meta_version": 1,
+        "verdict": "aligned_within_budget"
+      },
+      "total_records": 166,
+      "total_results": 144,
+      "verdict": "aligned_within_budget"
+    },
+    {
+      "contact_event_accuracy": 1.0,
+      "contact_events_matched": 25,
+      "contact_events_total": 25,
+      "episode_gate_passed": true,
+      "episode_gate_reasons": [],
+      "episode_seed": 7,
+      "exported_samples": 141,
+      "fixture": "can_jitter_mild",
+      "flagged_records": 0,
+      "lerobot_roundtrip_ok": true,
+      "max_abs_offset_ns": 199634,
+      "mean_abs_offset_ns": 103649.775,
+      "monotonicity_violations": 0,
+      "name": "can_jitter_mild",
+      "non_matched_results": 0,
+      "p95_abs_offset_ns": 189415,
+      "p99_abs_offset_ns": 199092,
+      "parquet_roundtrip_ok": true,
+      "replay_deterministic": true,
+      "scenario": "slip_recovery",
+      "streams": {
+        "contact_events": {
+          "delivered": 25,
+          "input": 25,
+          "surviving": 25
+        },
+        "disturbed": {
+          "delivered": 200,
+          "input": 200,
+          "surviving": 200
+        },
+        "reference": {
+          "delivered": 200,
+          "input": 200,
+          "surviving": 200
+        }
+      },
+      "timing_meta": {
+        "budget": {
+          "max_skew_ns": 2000000,
+          "window_ns": 10000000
+        },
+        "modalities": {
+          "contact_events": {
+            "clean_count": 25,
+            "clock_domain": "monotonic",
+            "flag_counts": {},
+            "flagged_count": 0,
+            "method_counts": {
+              "window": 45
+            },
+            "offset_max_ns": 9966842,
+            "offset_mean_ns": 443234.55555555556,
+            "offset_min_ns": -9996453,
+            "quality_counts": {
+              "matched": 45
+            }
+          },
+          "disturbed": {
+            "clean_count": 200,
+            "clock_domain": "monotonic",
+            "flag_counts": {},
+            "flagged_count": 0,
+            "method_counts": {
+              "nearest": 200
+            },
+            "offset_max_ns": 199634,
+            "offset_mean_ns": 8165.235,
+            "offset_min_ns": -197980,
+            "quality_counts": {
+              "matched": 200
+            }
+          },
+          "reference": {
+            "clean_count": 200,
+            "clock_domain": "monotonic",
+            "flag_counts": {},
+            "flagged_count": 0,
+            "method_counts": {},
+            "offset_max_ns": null,
+            "offset_mean_ns": null,
+            "offset_min_ns": null,
+            "quality_counts": {}
+          }
+        },
+        "timing_meta_version": 1,
+        "verdict": "aligned_within_budget"
+      },
+      "total_records": 425,
+      "total_results": 245,
+      "verdict": "aligned_within_budget"
+    },
+    {
+      "contact_event_accuracy": 1.0,
+      "contact_events_matched": 25,
+      "contact_events_total": 25,
+      "episode_gate_passed": true,
+      "episode_gate_reasons": [],
+      "episode_seed": 7,
+      "exported_samples": 141,
+      "fixture": "camera_variable_33ms",
+      "flagged_records": 0,
+      "lerobot_roundtrip_ok": true,
+      "max_abs_offset_ns": 1937014,
+      "mean_abs_offset_ns": 831177.45,
+      "monotonicity_violations": 0,
+      "name": "camera_variable_33ms",
+      "non_matched_results": 50,
+      "p95_abs_offset_ns": 1781464,
+      "p99_abs_offset_ns": 1937014,
+      "parquet_roundtrip_ok": true,
+      "replay_deterministic": true,
+      "scenario": "slip_recovery",
+      "streams": {
+        "contact_events": {
+          "delivered": 25,
+          "input": 25,
+          "surviving": 25
+        },
+        "disturbed": {
+          "delivered": 90,
+          "input": 90,
+          "surviving": 90
+        },
+        "reference": {
+          "delivered": 90,
+          "input": 90,
+          "surviving": 90
+        }
+      },
+      "timing_meta": {
+        "budget": {
+          "max_skew_ns": 2000000,
+          "window_ns": 33333333
+        },
+        "modalities": {
+          "contact_events": {
+            "clean_count": 25,
+            "clock_domain": "monotonic",
+            "flag_counts": {},
+            "flagged_count": 0,
+            "method_counts": {
+              "window": 50
+            },
+            "offset_max_ns": 32200724,
+            "offset_mean_ns": -1166376.52,
+            "offset_min_ns": -33224140,
+            "quality_counts": {
+              "matched": 50
+            }
+          },
+          "disturbed": {
+            "clean_count": 90,
+            "clock_domain": "monotonic",
+            "flag_counts": {},
+            "flagged_count": 0,
+            "method_counts": {
+              "exact": 1,
+              "nearest": 89
+            },
+            "offset_max_ns": 1781464,
+            "offset_mean_ns": -109179.1,
+            "offset_min_ns": -1937014,
+            "quality_counts": {
+              "matched": 40,
+              "out_of_budget": 50
+            }
+          },
+          "reference": {
+            "clean_count": 90,
+            "clock_domain": "monotonic",
+            "flag_counts": {},
+            "flagged_count": 0,
+            "method_counts": {},
+            "offset_max_ns": null,
+            "offset_mean_ns": null,
+            "offset_min_ns": null,
+            "quality_counts": {}
+          }
+        },
+        "timing_meta_version": 1,
+        "verdict": "degraded"
+      },
+      "total_records": 205,
+      "total_results": 140,
+      "verdict": "degraded"
+    },
+    {
+      "contact_event_accuracy": 0.8,
+      "contact_events_matched": 20,
+      "contact_events_total": 25,
+      "episode_gate_passed": false,
+      "episode_gate_reasons": [
+        "monotonic clock went backwards on 1 interval(s)",
+        "1 dropout(s): interval > 2.5x period"
+      ],
+      "episode_seed": 7,
+      "exported_samples": 141,
+      "fixture": "burst_stall_200ms",
+      "flagged_records": 20,
+      "lerobot_roundtrip_ok": true,
+      "max_abs_offset_ns": 0,
+      "mean_abs_offset_ns": 0.0,
+      "monotonicity_violations": 20,
+      "name": "burst_stall_200ms",
+      "non_matched_results": 25,
+      "p95_abs_offset_ns": 0,
+      "p99_abs_offset_ns": 0,
+      "parquet_roundtrip_ok": true,
+      "replay_deterministic": true,
+      "scenario": "slip_recovery",
+      "streams": {
+        "contact_events": {
+          "delivered": 25,
+          "input": 25,
+          "surviving": 25
+        },
+        "disturbed": {
+          "delivered": 200,
+          "input": 200,
+          "surviving": 180
+        },
+        "reference": {
+          "delivered": 200,
+          "input": 200,
+          "surviving": 200
+        }
+      },
+      "timing_meta": {
+        "budget": {
+          "max_skew_ns": 2000000,
+          "window_ns": 10000000
+        },
+        "modalities": {
+          "contact_events": {
+            "clean_count": 25,
+            "clock_domain": "monotonic",
+            "flag_counts": {},
+            "flagged_count": 0,
+            "method_counts": {
+              "window": 63
+            },
+            "offset_max_ns": 10000000,
+            "offset_mean_ns": -172413.7931034483,
+            "offset_min_ns": -10000000,
+            "quality_counts": {
+              "matched": 58,
+              "no_target": 5
+            }
+          },
+          "disturbed": {
+            "clean_count": 180,
+            "clock_domain": "monotonic",
+            "flag_counts": {
+              "backwards_in_source": 20
+            },
+            "flagged_count": 20,
+            "method_counts": {
+              "exact": 180,
+              "nearest": 20
+            },
+            "offset_max_ns": 0,
+            "offset_mean_ns": 0.0,
+            "offset_min_ns": 0,
+            "quality_counts": {
+              "matched": 180,
+              "out_of_budget": 20
+            }
+          },
+          "reference": {
+            "clean_count": 200,
+            "clock_domain": "monotonic",
+            "flag_counts": {},
+            "flagged_count": 0,
+            "method_counts": {},
+            "offset_max_ns": null,
+            "offset_mean_ns": null,
+            "offset_min_ns": null,
+            "quality_counts": {}
+          }
+        },
+        "timing_meta_version": 1,
+        "verdict": "degraded"
+      },
+      "total_records": 425,
+      "total_results": 263,
+      "verdict": "quarantined"
+    },
+    {
+      "contact_event_accuracy": 1.0,
+      "contact_events_matched": 25,
+      "contact_events_total": 25,
+      "episode_gate_passed": true,
+      "episode_gate_reasons": [],
+      "episode_seed": 7,
+      "exported_samples": 141,
+      "fixture": "skewed_source_clock",
+      "flagged_records": 0,
+      "lerobot_roundtrip_ok": true,
+      "max_abs_offset_ns": null,
+      "mean_abs_offset_ns": null,
+      "monotonicity_violations": 0,
+      "name": "skewed_source_clock",
+      "non_matched_results": 200,
+      "p95_abs_offset_ns": null,
+      "p99_abs_offset_ns": null,
+      "parquet_roundtrip_ok": true,
+      "replay_deterministic": true,
+      "scenario": "slip_recovery",
+      "streams": {
+        "contact_events": {
+          "delivered": 25,
+          "input": 25,
+          "surviving": 25
+        },
+        "disturbed": {
+          "delivered": 200,
+          "input": 200,
+          "surviving": 200
+        },
+        "reference": {
+          "delivered": 200,
+          "input": 200,
+          "surviving": 200
+        }
+      },
+      "timing_meta": {
+        "budget": {
+          "max_skew_ns": 2000000,
+          "window_ns": 10000000
+        },
+        "modalities": {
+          "contact_events": {
+            "clean_count": 25,
+            "clock_domain": "monotonic",
+            "flag_counts": {},
+            "flagged_count": 0,
+            "method_counts": {
+              "window": 50
+            },
+            "offset_max_ns": 5575000,
+            "offset_mean_ns": 392500.0,
+            "offset_min_ns": -4790000,
+            "quality_counts": {
+              "matched": 50
+            }
+          },
+          "disturbed": {
+            "clean_count": 200,
+            "clock_domain": "monotonic",
+            "flag_counts": {},
+            "flagged_count": 0,
+            "method_counts": {
+              "nearest": 200
+            },
+            "offset_max_ns": null,
+            "offset_mean_ns": null,
+            "offset_min_ns": null,
+            "quality_counts": {
+              "out_of_budget": 200
+            }
+          },
+          "reference": {
+            "clean_count": 200,
+            "clock_domain": "monotonic",
+            "flag_counts": {},
+            "flagged_count": 0,
+            "method_counts": {},
+            "offset_max_ns": null,
+            "offset_mean_ns": null,
+            "offset_min_ns": null,
+            "quality_counts": {}
+          }
+        },
+        "timing_meta_version": 1,
+        "verdict": "quarantined"
+      },
+      "total_records": 425,
+      "total_results": 250,
+      "verdict": "quarantined"
+    }
+  ],
+  "scenario": "slip_recovery",
+  "thresholds": {
+    "burst_stall_200ms": {
+      "allowed_verdicts": [
+        "quarantined"
+      ],
+      "max_abs_offset_ns": 0,
+      "max_flagged_records": 20,
+      "max_monotonicity_violations": 20,
+      "max_p99_abs_offset_ns": 0,
+      "min_contact_accuracy": 0.5
+    },
+    "camera_variable_33ms": {
+      "allowed_verdicts": [
+        "aligned_within_budget",
+        "degraded"
+      ],
+      "max_abs_offset_ns": 2000000,
+      "max_flagged_records": 0,
+      "max_monotonicity_violations": 0,
+      "max_p99_abs_offset_ns": 2000000,
+      "min_contact_accuracy": 1.0
+    },
+    "can_jitter_mild": {
+      "allowed_verdicts": [
+        "aligned_within_budget",
+        "degraded"
+      ],
+      "max_abs_offset_ns": 200000,
+      "max_flagged_records": 0,
+      "max_monotonicity_violations": 0,
+      "max_p99_abs_offset_ns": 200000,
+      "min_contact_accuracy": 1.0
+    },
+    "clean_baseline": {
+      "allowed_verdicts": [
+        "aligned_within_budget"
+      ],
+      "max_abs_offset_ns": 20000000,
+      "max_flagged_records": 0,
+      "max_monotonicity_violations": 0,
+      "max_p99_abs_offset_ns": 20000000,
+      "min_contact_accuracy": 1.0
+    },
+    "skewed_source_clock": {
+      "allowed_verdicts": [
+        "quarantined"
+      ],
+      "max_abs_offset_ns": null,
+      "max_flagged_records": 0,
+      "max_monotonicity_violations": 0,
+      "max_p99_abs_offset_ns": null,
+      "min_contact_accuracy": 1.0
+    }
+  }
+}

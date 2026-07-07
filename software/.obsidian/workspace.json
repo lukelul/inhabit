@@ -1,0 +1,218 @@
+{
+  "main": {
+    "id": "c8ec1fa55f7cd95c",
+    "type": "split",
+    "children": [
+      {
+        "id": "a9ae83408740a76d",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "7519ef7fb9333605",
+            "type": "leaf",
+            "state": {
+              "type": "empty",
+              "state": {},
+              "icon": "lucide-file",
+              "title": "New tab"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "2758c81910da5ece",
+    "type": "split",
+    "children": [
+      {
+        "id": "575b52b92a1ab549",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a81e4710a4bbf0f5",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "13dd969214f69422",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "1d8b7e5659d1284b",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "329ca7f8c8b98984",
+    "type": "split",
+    "children": [
+      {
+        "id": "bc8f4bb73e7c5953",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "277ae5214325a143",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "10a4707418ab93cc",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "0911de614b4c10de",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "1b368dc9c87718bb",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "310fff8a523c48b5",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "7519ef7fb9333605",
+  "lastOpenFiles": [
+    "POST_GREEN_ROADMAP.md",
+    "docs/maps/Benchmark Map.md",
+    "docs/maps/Last Centimeter Map.md",
+    "docs/maps/Hardware Bringup Map.md",
+    "docs/maps/PR Workflow Map.md",
+    "docs/maps/Agent Workflow Map.md",
+    "docs/maps/Data Pipeline Map.md",
+    "docs/maps/Host Software Map.md",
+    "docs/maps/Firmware Stack Map.md",
+    "docs/maps/Hardware Stack Map.md",
+    "docs/maps/System Architecture Map.md",
+    "docs/decisions/0010-PCBA-Both-Sides-and-Hand-Soldered-Exclusions.md",
+    "docs/decisions/0009-Last-Centimeter-Data-Thesis.md",
+    "docs/decisions/0008-Universal-Teleop-Kernel.md",
+    "docs/decisions/0007-Obsidian-GitNexus-CodeRabbit-Agent-System.md",
+    "docs/decisions/0006-RobotAdapter-Frozen-Contract.md",
+    "docs/decisions/0005-PVT-Data-Pipeline.md",
+    "docs/decisions/0004-MCP2515-SPI-CAN-Architecture.md",
+    "docs/decisions/0003-MT6701-Analog-Calibration.md",
+    "docs/decisions/0002-ENUM-Protocol.md",
+    "docs/decisions/0001-CAN-Schema-v1.md",
+    "docs/templates/Hardware Failure Report Template.md",
+    "docs/templates/Experiment Log Template.md",
+    "docs/templates/Risk Entry Template.md",
+    "docs/templates/Agent Assignment Template.md",
+    "docs/templates/Benchmark Progress Template.md",
+    "host/inhabit_bridge/tests/__pycache__/test_transport_source.cpython-313-pytest-9.1.1.pyc",
+    "host/inhabit_bridge/tests/__pycache__",
+    "host/inhabit_bridge/tests/test_transport_source.py",
+    "host/inhabit_bridge/tests",
+    "host/inhabit_bridge/launch/bridge.launch.py.tmp.11616.7036e73914a5",
+    "scripts/verify.ps1.tmp.11616.15ad0741dc2d",
+    "host/inhabit_bridge/__pycache__/transport_source.cpython-313.pyc",
+    "host/inhabit_bridge/launch/bridge.launch.py.tmp.11616.03a0d289ba97",
+    "firmware/test/test_enum_integrate.c",
+    "firmware/test/test_enum_integrate.c.tmp.11616.a21a6e168ad0"
+  ]
+}
