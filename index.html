@@ -16,23 +16,9 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
 
   <link rel="stylesheet" href="style.css" />
+  <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.162.0/build/three.module.min.js"}}</script>
 </head>
 <body>
-
-  <!-- BOOT SEQUENCE -->
-  <div id="boot" class="boot" role="status" aria-label="System initializing">
-    <div class="boot__inner">
-      <div class="boot__logo">
-        <div class="boot__mark"><div class="boot__mark-dot"></div></div>
-        <span class="boot__name">Inhabit</span>
-      </div>
-      <div class="boot__log" id="bootLog"></div>
-      <div class="boot__progress-track">
-        <div class="boot__progress-bar" id="bootBar"></div>
-      </div>
-      <div class="boot__skip">CLICK TO SKIP</div>
-    </div>
-  </div>
 
   <a class="skip-link" href="#main">Skip to content</a>
 
@@ -67,50 +53,14 @@
     <!-- ══════════════════════════ HERO ══════════════════════════ -->
     <section class="hero" id="top">
       <div class="hero__bg" aria-hidden="true">
-        <canvas class="hero__canvas" id="heroCanvas"></canvas>
-        <div class="hero__glow"></div>
-        <div class="hero__grid"></div>
-        <!-- HUD corner brackets -->
-        <div class="hud-frame">
-          <span class="hud-frame__tl"></span>
-          <span class="hud-frame__tr"></span>
-          <span class="hud-frame__bl"></span>
-          <span class="hud-frame__br"></span>
-        </div>
-        <!-- Wireframe arm -->
-        <svg class="arm" viewBox="0 0 520 520" fill="none" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
-          <defs>
-            <linearGradient id="armStroke" x1="0" y1="1" x2="1" y2="0">
-              <stop offset="0" stop-color="#3cc8ff" stop-opacity="0.15"/>
-              <stop offset="1" stop-color="#3cc8ff" stop-opacity="0.7"/>
-            </linearGradient>
-          </defs>
-          <circle cx="150" cy="430" r="46" stroke="rgba(60,200,255,0.07)" stroke-width="1.5"/>
-          <circle cx="150" cy="430" r="30" stroke="rgba(60,200,255,0.04)" stroke-width="1"/>
-          <circle cx="150" cy="430" r="8" fill="#3cc8ff" opacity="0.75"/>
-          <g class="arm__sway">
-            <line x1="150" y1="430" x2="150" y2="300" stroke="url(#armStroke)" stroke-width="2.5" stroke-linecap="round"/>
-            <circle cx="150" cy="300" r="12" stroke="#3cc8ff" stroke-width="1.5" fill="rgba(6,9,11,0.85)"/>
-            <line x1="150" y1="300" x2="270" y2="230" stroke="url(#armStroke)" stroke-width="2.5" stroke-linecap="round"/>
-            <circle cx="270" cy="230" r="10" stroke="#3cc8ff" stroke-width="1.5" fill="rgba(6,9,11,0.85)"/>
-            <line x1="270" y1="230" x2="348" y2="264" stroke="url(#armStroke)" stroke-width="2.5" stroke-linecap="round"/>
-            <g class="arm__grip">
-              <line x1="348" y1="264" x2="380" y2="247" stroke="#3cc8ff" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
-              <line x1="348" y1="264" x2="380" y2="281" stroke="#3cc8ff" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
-              <circle cx="348" cy="264" r="5" fill="#3cc8ff"/>
-            </g>
-          </g>
-          <circle class="arm__target" cx="432" cy="184" r="3.5" fill="#3cc8ff"/>
-          <circle class="arm__target-ring" cx="432" cy="184" r="14" stroke="#3cc8ff" stroke-width="0.75" fill="none"/>
-        </svg>
+        <canvas class="hero__canvas" id="hero3d"></canvas>
       </div>
 
       <div class="hero__content">
         <div class="hero__badge reveal">
-          <span class="hero__badge-dot"></span>
-          UNIVERSAL TELEOPERATION KERNEL
+          Universal teleoperation kernel
         </div>
-        <h1 class="hero__title reveal">The universal software layer for robots.</h1>
+        <h1 class="hero__title reveal">The universal<br>software layer<br>for robots.</h1>
         <p class="hero__sub reveal">One kernel to drive any robot. One pipeline to turn every session into manufacturable-grade data.</p>
         <div class="hero__cta reveal">
           <a class="btn btn--primary" href="mailto:hello@inhabit.dev">Request a demo →</a>
@@ -121,26 +71,19 @@
         </div>
       </div>
 
-      <!-- Scrolling ticker -->
-      <div class="ticker" aria-hidden="true">
-        <div class="ticker__track">
-          <div class="ticker__inner">
-            <span>OPERATE</span><span class="ticker__sep">·</span><span>CAPTURE</span><span class="ticker__sep">·</span><span>DEPLOY</span><span class="ticker__sep">·</span><span>ROS&nbsp;2</span><span class="ticker__sep">·</span><span>RTDE</span><span class="ticker__sep">·</span><span>CANOPEN</span><span class="ticker__sep">·</span><span>ETHERCAT</span><span class="ticker__sep">·</span><span>PVT PIPELINE</span><span class="ticker__sep">·</span><span>LEROBOT</span><span class="ticker__sep">·</span><span>MCAP</span><span class="ticker__sep">·</span><span>RLDS</span><span class="ticker__sep">·</span><span>OPEN SOURCE</span><span class="ticker__sep">·</span>
-            <span>OPERATE</span><span class="ticker__sep">·</span><span>CAPTURE</span><span class="ticker__sep">·</span><span>DEPLOY</span><span class="ticker__sep">·</span><span>ROS&nbsp;2</span><span class="ticker__sep">·</span><span>RTDE</span><span class="ticker__sep">·</span><span>CANOPEN</span><span class="ticker__sep">·</span><span>ETHERCAT</span><span class="ticker__sep">·</span><span>PVT PIPELINE</span><span class="ticker__sep">·</span><span>LEROBOT</span><span class="ticker__sep">·</span><span>MCAP</span><span class="ticker__sep">·</span><span>RLDS</span><span class="ticker__sep">·</span><span>OPEN SOURCE</span><span class="ticker__sep">·</span>
-          </div>
-        </div>
+      <div class="hero__scrollcue reveal" aria-hidden="true" data-delay="400">
+        <span>Scroll</span>
+        <div class="hero__scrollcue-line"></div>
       </div>
     </section>
 
     <!-- ══════════════════════ 01 PLATFORM ══════════════════════ -->
     <section class="section platform" id="platform">
+      <canvas class="scroll-arm-canvas" id="armPlatform" aria-hidden="true"></canvas>
       <div class="wrap">
-        <span class="ghost-num" aria-hidden="true">01</span>
-        <div class="section__split reveal">
-          <div>
-            <div class="kicker">01 — PLATFORM</div>
-            <h2 class="section__title">Operate.<br>Capture.<br>Deploy.</h2>
-          </div>
+        <div class="section__center reveal">
+          <div class="kicker">Platform</div>
+          <h2 class="section__title">Operate.<br>Capture.<br>Deploy.</h2>
           <p class="section__intro">Inhabit is the operating layer between human intent and any robot body — and the pipeline that turns every minute of operation into training-grade data.</p>
         </div>
 
@@ -180,11 +123,11 @@
 
     <!-- ══════════════════════ 02 TELEOP KERNEL ══════════════════════ -->
     <section class="section kernel" id="kernel">
+      <canvas class="scroll-arm-canvas" id="armKernel" aria-hidden="true"></canvas>
       <div class="wrap">
-        <span class="ghost-num ghost-num--left" aria-hidden="true">02</span>
         <div class="kernel__grid">
           <div class="reveal">
-            <div class="kicker">02 — UNIVERSAL TELEOP KERNEL</div>
+            <div class="kicker">Teleop kernel</div>
             <h2 class="section__title">Any robot. Any protocol. One kernel.</h2>
             <p class="kernel__body">Adapters translate robot-native protocols into a single control contract. Transports carry commands over whatever link exists. Operators never see the difference.</p>
             <ul class="kernel__points">
@@ -227,9 +170,8 @@
     <!-- ══════════════════════ 03 SESSION TIMELINE ══════════════════════ -->
     <section class="section session" id="session">
       <div class="wrap">
-        <span class="ghost-num" aria-hidden="true">03</span>
         <div class="section__center reveal">
-          <div class="kicker">03 — REPLAY A SESSION</div>
+          <div class="kicker">Live session</div>
           <h2 class="section__title">Scrub through a real teleop episode.</h2>
           <p class="session__intro">Every phase — reach, contact, grasp, recovery, place — captured in lockstep across proprioceptive, visual, and tactile streams.</p>
         </div>
@@ -274,9 +216,8 @@
     <section class="section pvt" id="data">
       <div class="pvt__band">
         <div class="wrap">
-          <span class="ghost-num ghost-num--left" aria-hidden="true">04</span>
           <div class="section__center reveal">
-            <div class="kicker">04 — PVT DATA PLATFORM</div>
+            <div class="kicker">PVT data</div>
             <h2 class="section__title">Every session becomes a dataset.</h2>
             <p class="pvt__intro">Proprioceptive, visual, and tactile streams — captured in lockstep, event-segmented, QA-gated, exported in the formats your training stack already speaks.</p>
           </div>
@@ -351,12 +292,9 @@
     <!-- ══════════════════════ 05 HARDWARE ══════════════════════ -->
     <section class="section hardware" id="hardware">
       <div class="wrap">
-        <span class="ghost-num" aria-hidden="true">05</span>
-        <div class="section__split reveal">
-          <div>
-            <div class="kicker">05 — OPEN HARDWARE</div>
-            <h2 class="section__title">A complete capture stack — every layer open.</h2>
-          </div>
+        <div class="section__center reveal">
+          <div class="kicker">Open hardware</div>
+          <h2 class="section__title">A complete capture stack.<br>Every layer open.</h2>
           <p class="section__intro">Modular leader-follower arms and an egocentric capture rig. Build it yourself, calibrate in minutes, and start collecting demonstrations at a fraction of the usual cost.</p>
         </div>
 
@@ -411,10 +349,9 @@
     <!-- ══════════════════════ 06 LAST CENTIMETER ══════════════════════ -->
     <section class="section last-cm" id="last-cm">
       <div class="wrap">
-        <span class="ghost-num" aria-hidden="true">06</span>
         <div class="last-cm__grid">
           <div class="reveal">
-            <div class="kicker">06 — THE LAST CENTIMETER</div>
+            <div class="kicker">The last centimeter</div>
             <h2 class="section__title">Anyone can get close. We finish the motion.</h2>
             <p class="last-cm__body">The last centimeter of a manipulation task — contact, compliance, grip modulation — is where policies fail and where the valuable data lives. Sub-frame timing makes that centimeter observable, trainable, and repeatable.</p>
             <div class="last-cm__stats">
@@ -453,10 +390,9 @@
     <!-- ══════════════════════ 07 SDK ══════════════════════ -->
     <section class="section sdk" id="sdk">
       <div class="wrap">
-        <span class="ghost-num ghost-num--left" aria-hidden="true">07</span>
         <div class="sdk__grid">
           <div class="reveal">
-            <div class="kicker">07 — SDK &amp; INTEGRATION</div>
+            <div class="kicker">SDK &amp; integration</div>
             <h2 class="section__title">A new robot is an afternoon, not a quarter.</h2>
             <p class="sdk__body">Implement one adapter contract and the whole platform lights up: teleop, capture, QA, simulation, benchmarks.</p>
             <div class="sdk__checks">
@@ -561,5 +497,7 @@
   </footer>
 
   <script src="script.js"></script>
+  <script type="module" src="hero3d.js"></script>
+  <script type="module" src="scrollarms.js"></script>
 </body>
 </html>
