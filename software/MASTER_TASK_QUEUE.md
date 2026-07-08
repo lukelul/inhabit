@@ -194,7 +194,14 @@ mypy strict · **0 frozen-contract edits** · GitNexus reindexed (sim cores wire
 
 ---
 
-## P-C — Time-sync & multi-modal alignment (DECOMPOSED 2026-07-04)
+## P-C — Time-sync & multi-modal alignment — ✅ **PHASE COMPLETE 2026-07-08**
+
+> C1 #52 · C2 #53 · C3 #54 · C4 #55 · C6 #56 · C5 #57 · C7 #59 — all MERGED. Exit report +
+> MEASURED benchmark table in `STATUS.md` (PHASE-C COMPLETE, 2026-07-08). 3-state `SyncVerdict`
+> (aligned/degraded/quarantined); gate provably fails on injected violations; committed evidence
+> `docs/bench/P-C-TIMING-BENCH.*`. Simulation-proven; SDK map is SDK-doc-audited; hardware smoke
+> stays bench-pending (`SDK_TIMEBASE_MAP §4`). (C7 merged from its pre-review commit during the
+> 2026-07-08 parallel-work window; CodeRabbit nits re-applied in a follow-up host-lane PR.)
 
 **Goal:** make the PVT pipeline **temporally correct** to a manufacturable bar: one monotonic timeline,
 explicit clock domains, normalization that never silently "fixes" bad stamps, an alignment engine with
@@ -314,3 +321,68 @@ benchmark gate green with committed report · verify green · coverage ≥90% ·
 > (parallel with C5) → C7 last. Lanes: dataset/export worker = C1-C5, adapters worker = C6,
 > release = C7. Each: existing worktree, fresh branch off origin/main, Pre/Post-Work Evidence,
 > PR, CodeRabbit adversarial round, orchestrator merges on green.
+
+## P-D — Last-centimeter contact-event detection (DECOMPOSED 2026-07-08)
+
+**Goal:** turn the time-aligned PVT window into **typed, labeled contact events** — the wedge of the
+data engine (contact_start/release, current_spike, impact, slip). Every detector is a versioned
+`EventDetector` plugin, graded against **labeled synthetic ground truth** with **precision/recall
+thresholds that can fail**. Built on the merged P-A `EventDetector` ABC + `Event`/`EventKind`/`Window`
+(`host/events/`) and the P-B/P-C scenario+timing stack. Simulation-proven; contact physics on real
+silicon stays bench-pending (never overclaim a detector "works" from sim alone).
+
+**Invariants for every P-D task** (lead with the failure mode each prevents):
+- **Frozen contracts untouched:** `EventDetector`/`Event`/`EventKind`/`DETECTOR_SCHEMA_VERSION`,
+  `PVTSample`/`PVT_SCHEMA_VERSION`. New event kinds/fields = a versioned schema change with a
+  decision record, NOT a silent edit.
+- **Un-fakeable grading:** the scorer must penalize BOTH misses (a silent/noop detector fails recall)
+  AND false positives (a spam detector fails precision). A detection just outside tolerance is a
+  miss, not a match; wrong-kind-right-time is not a match; one truth ↔ one detection (no double credit).
+- **Labeled ground truth from the scenario scripts**, never re-detected: a scenario declares the
+  contact moments it scripts; a free-space scenario yields zero labels (the false-positive negative case).
+- **Deterministic:** same scenario+seed → identical labels and identical detector output (no wall clock).
+- **Detection uses only the window's own aligned timestamps** (C1 monotonic), never a fresh clock.
+- **Lane:** `host/` (data-pipeline) only; PRs off fresh `origin/main`; ≥90% branch; ruff+mypy strict.
+
+**D1 · Labeled ground truth + precision/recall scorer** · lane: dataset · branch `feat/p-d/label-scorer` — **PR (dispatched)**
+- Ground-truth `list[Event]` from a scenario's scripted contact timeline (`host/events/labels.py`) +
+  `score_events(truth, detected, tolerance_ns)` → `DetectionScore` (TP/FP/FN, precision/recall/F1, per-kind).
+- Tests: perfect=1.0; noop→recall<1; spam→precision low; ±tolerance boundary exact; wrong-kind no match;
+  one-to-one matching; free-space yields [] truth; determinism. **Foundation — D2–D7 gate through this.**
+
+**D2 · Contact detector (contact_start / contact_release)** · lane: dataset · branch `feat/p-d/contact-detector`
+- The core wedge: force/current rise→`contact_start`, fall→`contact_release` over the aligned window.
+  Versioned plugin via `make_event_detector`. Meets a documented P/R threshold on the labeled suite.
+- Tests: meets threshold on contact scenarios; no false positives on free-space; hysteresis (no chatter).
+
+**D3 · Current-spike detector** · lane: dataset · branch `feat/p-d/current-spike`
+- Motor-current jump (bind/jam/hard contact) → `current_spike`. Threshold on the labeled suite; must
+  NOT fire on ordinary contact ramps (distinguish spike from steady contact).
+
+**D4 · Impact detector** · lane: dataset · branch `feat/p-d/impact`
+- Abrupt velocity discontinuity + vibration → `impact`. Threshold on labeled impact scenarios; must
+  separate impact from a normal contact_start.
+
+**D5 · Slip detector** · lane: dataset · branch `feat/p-d/slip`
+- Grasped-object micro-vibration + unexpected velocity → `slip`. Threshold on `slip_recovery`-class
+  scenarios; must not confuse slip with release.
+
+**D6 · Vibration / MEMS-audio surrogate channel + detector** · lane: dataset · branch `feat/p-d/vibration`
+- A synthetic vibration/contact-audio surrogate channel (extends the B5 sensor-source stack, no
+  `PVTSample` change — sidecar/derived) feeding a vibration detector that sharpens impact/slip recall.
+
+**D7 · P-D detection phase-gate** · lane: dataset/release · branch `feat/p-d/detection-gate`
+- Aggregate precision/recall report across ALL detectors on the labeled suite (the C7 analog for
+  detection): committed `docs/bench/P-D-DETECTION.*` artifact, per-detector P/R vs threshold, gate
+  exit≠0 when any detector misses its bar. **P-D cannot close until this gate passes.**
+
+### P-D exit (phase DONE only when all true)
+
+D1–D7 merged · labeled synthetic episodes with scripted ground truth · each detector meets its
+precision/recall threshold on the suite · scorer provably penalizes miss AND false-positive · every
+detector versioned (`DETECTOR_SCHEMA_VERSION`) · detection phase-gate green with committed report ·
+verify green · coverage ≥90% · mypy strict · **0 frozen-contract edits** · GitNexus reindexed.
+
+> Dispatch order: **D1 first** (scorer is the spine everything grades through) → then D2–D6 in
+> parallel (each an independent detector plugin + its labeled-suite threshold) → D7 last (aggregate
+> gate). Lane: `host/` data-pipeline only, single-lane PRs, CodeRabbit adversarial round, merge on green.

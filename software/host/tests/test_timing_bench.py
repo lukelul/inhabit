@@ -202,6 +202,9 @@ class TestGate:
     def test_empty_reports_or_bad_types_raise(self) -> None:
         with pytest.raises(ValueError, match="reports is empty"):
             gate([], DEFAULT_THRESHOLDS)
+        # An unvalidated blob is not a gateable measurement.
+        with pytest.raises(ValueError, match="must be a BenchReport"):
+            gate([object()], DEFAULT_THRESHOLDS)  # type: ignore[list-item]
 
 
 # ---------------------------------------------------------------------------
@@ -282,8 +285,9 @@ class TestCli:
 
     def test_artifacts_are_byte_identical_for_same_args(self, tmp_path: Path) -> None:
         a, b = tmp_path / "a", tmp_path / "b"
-        main(["--out", str(a), "--seed", "7"])
-        main(["--out", str(b), "--seed", "7"])
+        # Same args must also mean the same gate outcome (exit code), not just bytes.
+        assert main(["--out", str(a), "--seed", "7"]) == 0
+        assert main(["--out", str(b), "--seed", "7"]) == 0
         for base in (f"{REPORT_BASENAME}.json", f"{REPORT_BASENAME}.md"):
             assert (a / base).read_bytes() == (b / base).read_bytes()
 

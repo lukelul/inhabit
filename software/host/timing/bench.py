@@ -72,6 +72,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import logging
 import math
 import re
 import sys
@@ -98,6 +99,8 @@ from timing.export_meta import ModalityTiming, SyncVerdict, TimingMeta
 from timing.normalize import NormalizationFlag, Normalizer, TimingRecord
 from timing.stamp import ClockDomain
 from tools.dataset.scenario_episode import build_scenario_episode
+
+_log = logging.getLogger("inhabit.bench")
 
 __all__ = [
     "BENCH_VERSION",
@@ -989,6 +992,16 @@ def run_bench(case: BenchCase, *, workdir: str | Path) -> BenchReport:
     first = _measure(case, root / "run1")
     second = _measure(case, root / "run2")
     deterministic = _canonical_json(first) == _canonical_json(second)
+    if not deterministic:
+        # Name the fields that differed so a determinism regression is debuggable from
+        # the log, not just "two runs differed" — a silent non-determinism is the worst
+        # kind (it makes the whole bench untrustworthy).
+        differing = sorted(k for k in first if first.get(k) != second.get(k))
+        _log.warning(
+            "bench case %r replay is NON-deterministic; differing top-level fields: %s",
+            case.name,
+            differing or "<nested value(s) only>",
+        )
     return BenchReport.from_dict({**first, "replay_deterministic": deterministic})
 
 

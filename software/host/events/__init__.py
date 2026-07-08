@@ -21,7 +21,9 @@ from typing import Any
 
 from inhabit_core import Registry
 
+from .contact import ContactDetector
 from .detectors import NoopDetector, ThresholdDetector
+from .impact import ImpactDetector
 from .interface import (
     DETECTOR_SCHEMA_VERSION,
     Event,
@@ -40,6 +42,8 @@ _REGISTRY: Registry[EventDetector] = Registry(
 # Zero-dependency stubs: register the classes directly.
 _REGISTRY.register("noop", NoopDetector)
 _REGISTRY.register("threshold", ThresholdDetector)
+_REGISTRY.register("contact", ContactDetector)
+_REGISTRY.register("impact", ImpactDetector)
 
 
 def make_event_detector(name: str, **kwargs: Any) -> EventDetector:
@@ -57,9 +61,11 @@ def list_event_detectors() -> list[str]:
 
 __all__ = [
     "DETECTOR_SCHEMA_VERSION",
+    "ContactDetector",
     "Event",
     "EventDetector",
     "EventKind",
+    "ImpactDetector",
     "NoopDetector",
     "ThresholdDetector",
     "Window",
